@@ -11,6 +11,8 @@
 ### Front End:
  React JS
 ### Back End:
+- Nest JS
+- Prisma 
 - Express
 - Node.js
 
