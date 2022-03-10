@@ -2,7 +2,9 @@
   "compilerOptions": {
       "module": "commonjs",
       "esModuleInterop": true,
-      "target": "es6",
+      "lib": ["es6","dom"],//inverify requirement
+      "types": ["reflect-metadata"],//inverify requirement
+      "target": "es5", //es5 //inverify requirement
       "noImplicitAny": true,
       "moduleResolution": "node",
       "sourceMap": true,
@@ -12,7 +14,9 @@
           "*": [
               "node_modules/*"
           ]
-      }
+      },
+      "experimentalDecorators": true, //inverify requirement
+      "emitDecoratorMetadata": true //inverify requirement
   },
   "include": [
       "./src/**/*"
