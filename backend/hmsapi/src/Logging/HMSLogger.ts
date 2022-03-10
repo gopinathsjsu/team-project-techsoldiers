@@ -1,14 +1,32 @@
-import {ILogger} from "./../Interfaces";
-import { Logger as tsLogger } from "tslog";
+/**
+ * IOC requirements
+ */
 import { injectable } from "inversify";
 import "reflect-metadata";
+/**
+ * Interface
+ */
+import { ILogger } from "@hsmapi/Interfaces";
+/**
+ * ThirdParty Module
+ */
+import { Logger as tsLogger } from "tslog";
+
+/**
+ * @class
+ * @classdesc Hotel Management System Logger implementing tslog
+ */
 @injectable()
-export default class HMSLogger implements ILogger{
+export default class HMSLogger implements ILogger {
     logger: tsLogger;
-    constructor(){
-        this.logger=new tsLogger();
+    constructor() {
+        this.logger = new tsLogger();
     }
-    logInfo(message: string)  : void {
-        this.logger.info("HMS Logger: "+message);
+    /**
+     * @function Log Info
+     * @param message message to be consoled to the lgo
+     */
+    logInfo(message: string): void {
+        this.logger.info("HMS Logger: " + message);
     };
 }

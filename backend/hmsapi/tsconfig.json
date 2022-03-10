@@ -9,11 +9,9 @@
       "moduleResolution": "node",
       "sourceMap": true,
       "outDir": "dist",
-      "baseUrl": ".",
+      "baseUrl": "./",
       "paths": {
-          "*": [
-              "node_modules/*"
-          ]
+        "@hsmapi/*":["src/*"]
       },
       "experimentalDecorators": true, //inverify requirement
       "emitDecoratorMetadata": true //inverify requirement
