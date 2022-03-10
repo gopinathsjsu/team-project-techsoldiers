@@ -11,5 +11,17 @@
     "Node.JS"
   ],
   "author": "varun.alla@sjsu.edu",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "dependencies": {
+    "express": "^4.17.3",
+    "mongoose": "^6.2.5"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.21",
+    "nodemon": "^2.0.15",
+    "pm2": "^5.2.0",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.2"
+  }
 }
