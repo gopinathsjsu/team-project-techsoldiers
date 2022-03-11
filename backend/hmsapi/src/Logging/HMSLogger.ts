@@ -6,7 +6,7 @@ import "reflect-metadata";
 /**
  * Interface
  */
-import { ILogger } from "@hsmapi/Interfaces";
+import { ILogger } from "@hsmapi/interfaces";
 /**
  * ThirdParty Module
  */

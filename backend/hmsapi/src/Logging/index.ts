@@ -1,1 +1,1 @@
-export { default as HMSLogger} from '@hsmapi/Logging/HMSLogger';
+export { default as HMSLogger} from '@hsmapi/logging/HMSLogger';

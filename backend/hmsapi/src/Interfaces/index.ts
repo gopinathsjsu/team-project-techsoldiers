@@ -1,1 +1,1 @@
-export { default as ILogger} from '@hsmapi/Interfaces/ILogger';
+export { default as ILogger} from '@hsmapi/interfaces/ILogger';

@@ -1,7 +1,10 @@
 import express from "express";
+import router from "./routes";
 
-const app= express();
-app.get('/',(Request,Response)=>{
-    Response.send("Hello World");
-});
-export default app;
+const createApp = (): express.Application => {
+    const app: express.Application = express();
+    app.use(router);
+    return app;
+}
+
+export default createApp;
