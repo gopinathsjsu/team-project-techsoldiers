@@ -3,7 +3,7 @@
       "module": "commonjs",
       "esModuleInterop": true,
       "lib": ["es6","dom"],//inverify requirement
-      "types": ["reflect-metadata"],//inverify requirement
+      "types": ["reflect-metadata","jest"],//inverify requirement
       "target": "es5", //es5 //inverify requirement
       "noImplicitAny": true,
       "moduleResolution": "node",
