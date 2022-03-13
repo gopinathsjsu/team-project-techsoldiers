@@ -10,16 +10,14 @@ import {
 @Injectable()
 export class AuthService {
   private userPool: CognitoUserPool;
-  constructor(
-    private readonly authConfig: AuthConfig,
-  ) {
+  constructor(private readonly authConfig: AuthConfig) {
     this.userPool = new CognitoUserPool({
       UserPoolId: this.authConfig.userPoolId,
       ClientId: this.authConfig.clientId,
     });
   }
 
-  confirmRegistration(confirmUser: { code: string; email: string; }) {
+  confirmRegistration(confirmUser: { code: string; email: string }) {
     const { code, email } = confirmUser;
 
     const userData = {
@@ -34,7 +32,10 @@ export class AuthService {
         if (err) {
           reject(err);
         } else {
-          resolve(result);
+          if (result == 'SUCCESS') {
+            const data = { status: 'success' };
+            resolve(data);
+          }
         }
       });
     });
@@ -71,8 +72,11 @@ export class AuthService {
           if (!result) {
             reject(error);
           } else {
-            
-            const data = { username: result.user.getUsername(), userConfirmation: result.userConfirmed, status: "success" }
+            const data = {
+              username: result.user.getUsername(),
+              userConfirmation: result.userConfirmed,
+              status: 'success',
+            };
             resolve(data);
           }
         },
