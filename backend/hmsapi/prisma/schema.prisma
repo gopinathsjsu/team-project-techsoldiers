@@ -25,6 +25,37 @@ model Hotel {
   id    Int     @default(autoincrement()) @id
   name String  
   locationid Int
-  location  Location? @relation(fields:[locationid],references:[id])
+  location  Location @relation(fields:[locationid],references:[id])
   description String
+  hotelRooms HotelRoom[]
 }
+
+model Room {
+   id    Int     @default(autoincrement()) @id
+  roomName String
+  roomCapacity Int
+  description String
+  hotelRooms HotelRoom[]  
+}
+
+model HotelRoom {
+
+  id Int  @default(autoincrement()) @id
+  hotelId Int 
+  hotel Hotel @relation(fields:[hotelId],references:[id]) 
+  roomId Int
+  room Room @relation(fields:[roomId],references:[id])
+  numberOfRooms Int
+  pricePerRoom Decimal
+ @@unique([hotelId, roomId])
+}
+
+model Amenities {
+  id Int  @default(autoincrement()) @id
+  name String
+  description String
+  price Decimal
+
+}
+
+
