@@ -101,7 +101,8 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       newUser.authenticateUser(authenticationDetails, {
         onSuccess: (result) => {
-          resolve(result);
+          const data = { token: { jwtToken: result.getIdToken().getJwtToken(), refreshToken: result.getRefreshToken().getToken(), accessToken: result.getAccessToken().getJwtToken() } }
+          resolve(data);
         },
         onFailure: (err) => {
           console.log(err);
