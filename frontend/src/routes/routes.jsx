@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 import SuspenseSpinner from "../components/SuspenseFallback";
 
-const Home = lazy(() => import('./../App'));
+const Home = lazy(() => import('./../Pages/Home'));
 const Admin = lazy(() => import('./../Pages/Admin'))
 
 /**

@@ -1,6 +1,6 @@
 import React from "react";
 import TopBar from '../../components/TopBar';
-
+import SearchComponent from "../../components/SearchComponent";
 export function Home(){
     const links =  [
         {
@@ -24,6 +24,7 @@ export function Home(){
     return(
         <>
         <TopBar links={links} />
+        <SearchComponent/>
         </>
     )
 }
