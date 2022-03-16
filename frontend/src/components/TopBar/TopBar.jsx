@@ -2,7 +2,6 @@ import React from 'react';
 import { createStyles, Header, Autocomplete, Group, Burger } from '@mantine/core';
 import { useBooleanToggle } from '@mantine/hooks';
 import { AiOutlineSearch as Search} from 'react-icons/ai';
-import { HMSLogo } from '../../assets/Logo';
 
 const useStyles = createStyles((theme) => ({
   header: {

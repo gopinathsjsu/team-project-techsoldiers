@@ -4,13 +4,16 @@ import { Provider } from 'react-redux';
 import { MantineProvider } from "@mantine/core";
 import { BrowserRouter} from "react-router-dom";
 import Routes from "./routes";
+import { AuthProvider } from "./helpers/hooks/useAuth";
 
 const Main = () => {
 return (
   <Provider store={store}>
     <MantineProvider>
       <BrowserRouter>
-        <Routes />
+        <AuthProvider>
+          <Routes />
+        </AuthProvider>
       </BrowserRouter>
     </MantineProvider>
   </Provider>
