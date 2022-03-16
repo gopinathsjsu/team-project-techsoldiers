@@ -11,16 +11,6 @@ const sdata = [
 ];
 
 
-export function PersonCounter(props) {
-
-    const [value, setValue] = useState(props.count);
-    const handlers = useRef(null);
-    return (
-        <></>
-    );
-}
-
-
 
 export function SearchComponent() {
     const containerStyle = {
