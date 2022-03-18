@@ -10,4 +10,9 @@ export class HotelController {
     return this.hotelService.hotels();
   } 
 
+  @Get('/:id')
+  async getHotelById(@Param('id') id: string): Promise<HotelModel> {
+    return {"id":2,"name":"Hyatt","locationid":1,"description":"New Hotel added"};
+  }
+
 }
