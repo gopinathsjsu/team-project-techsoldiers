@@ -1,1 +1,0 @@
-export { default as HMSLogger} from '@hsmapi/logging/HMSLogger';
