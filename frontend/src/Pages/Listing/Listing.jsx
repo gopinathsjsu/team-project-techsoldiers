@@ -1,15 +1,37 @@
 import React from "react";
-import { Center } from "@mantine/core";
+import { Box, Center, Container, Image } from "@mantine/core";
 import { Link } from "react-router-dom";
-export function Listing() {
+import TopBar from "../../components/TopBar";
+import HotelListing from "../../components/HotelListing";
+import hotel1 from '../../media/hotel1.jpg';
 
+
+export function Listing() {
+  const links = [
+    {
+      link: "/",
+      label: "Home",
+    },
+    {
+      link: "/listing",
+      label: "Listing",
+    },
+    {
+      link: "/hotel",
+      label: "Hotel",
+    },
+  ];
 
   return (
     <>
-      <Center>
-        <div>This is listing component</div>
-        <Link to="/hotel">Hotel</Link>
-      </Center>
+    <TopBar links={links} />
+    {/* <SearchComponent></SearchComponent> */}
+    <Box>
+      <Image src={hotel1} height={300} width='lg' mb={30} />
+      <Container>
+        <HotelListing />
+      </Container>
+    </Box>
     </>
   );
 }

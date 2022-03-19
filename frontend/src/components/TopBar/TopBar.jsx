@@ -60,23 +60,16 @@ export function TopBar({ links }) {
   ));
 
   return (
-    <Header height={56} className={classes.header} mb={120}>
+    <Header height={56} className={classes.header}>
       <div className={classes.inner}>
         <Group>
-          <Burger opened={opened} onClick={() => toggleOpened()} size="sm" />
-          <h2>HMS</h2>
+          <h2>Hotel Management System</h2>
         </Group>
 
         <Group>
           <Group ml={50} spacing={5} className={classes.links}>
             {items}
           </Group>
-          <Autocomplete
-            className={classes.search}
-            placeholder="Search"
-            icon={<Search size={16} />}
-            data={['React', 'Angular', 'Vue', 'Next.js', 'Riot.js', 'Svelte', 'Blitz.js']}
-          />
         </Group>
       </div>
     </Header>

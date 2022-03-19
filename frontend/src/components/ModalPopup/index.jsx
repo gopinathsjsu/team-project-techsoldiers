@@ -1,0 +1,1 @@
+export { ModalPopup as default } from './ModalPopup'
