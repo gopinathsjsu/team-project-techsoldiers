@@ -15,4 +15,17 @@ export class HotelController {
     return this.hotelService.hotelById({ id: Number(id) });
   }  
 
+  @Get('/location/:id')
+  async getHotelByLocations(@Param('id') id: string): Promise<HotelModel[]> {
+
+    return this.hotelService.hotelsByLocation({
+        where: {
+         
+              locationid: Number(id),
+            
+        },
+      });
+  }
+  
+
 }

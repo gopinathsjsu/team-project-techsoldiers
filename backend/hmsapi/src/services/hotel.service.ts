@@ -17,4 +17,14 @@ export class HotelService {
     });
   }
 
+  async hotelsByLocation(params: {
+    where?: Prisma.HotelWhereInput;
+    }): Promise<Hotel[]> {
+      const { where } = params;
+      return this.prisma.hotel.findMany({
+        where,
+    
+      });
+    }
+
 }
