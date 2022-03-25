@@ -1,7 +1,13 @@
 import React, { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 import SuspenseSpinner from "../components/SuspenseFallback";
-
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query'
 const Home = lazy(() => import('../pages/Home'));
 const Admin = lazy(() => import('../pages/Admin'))
 const Login = lazy(() => import('../pages/Auth/Login'))
@@ -29,12 +35,14 @@ export const Path = () => {
 ]
 
   const routes = useRoutes(element);
-
+  const queryClient = new QueryClient();
   return(
     <React.Fragment>
-      <Suspense fallback={<SuspenseSpinner />}>
+       <QueryClientProvider client={queryClient}>
+        <Suspense fallback={<SuspenseSpinner />}>
       {routes}
       </Suspense>
+      </QueryClientProvider>
     </React.Fragment>
   )
 }
