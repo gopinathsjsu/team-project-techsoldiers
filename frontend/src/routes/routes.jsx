@@ -35,13 +35,7 @@ export const Path = () => {
 ]
 
   const routes = useRoutes(element);
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        suspense: true,
-      },
-    },
-  })
+  const queryClient = new QueryClient();
   return(
     <React.Fragment>
        <QueryClientProvider client={queryClient}>
