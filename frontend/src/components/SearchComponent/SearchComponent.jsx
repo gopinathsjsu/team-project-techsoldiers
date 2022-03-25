@@ -1,28 +1,55 @@
 import React, { useEffect } from 'react';
+
 import dayjs from 'dayjs';
 import { useState, useRef } from 'react';
+
 import { Button, NumberInput, Group, ActionIcon, InputWrapper, Center, Grid, Container, Select } from '@mantine/core';
 import { DateRangePicker } from '@mantine/dates';
+import axios from 'axios';
+import { useQuery } from 'react-query'
 
 const sdata = [
     { value: 'LAX', label: 'Los Angeles' },
     { value: 'SFO', label: 'San Francisco' },
     { value: 'DEL', label: 'New Delhi' },
 ];
+function getLocations(){
+    return new Promise((resolve,reject)=>{
+            axios.get("http://localhost:3030/api/location").then((res)=>
+            resolve(res.data)).catch((err)=>reject(err));
+    });
+}
 
-
-
-export function SearchComponent() {
+export  function SearchComponent() {
     const containerStyle = {
         position: 'relative',
         padding: '1.6em'
-    }
+    };
+    
+
+  /*  locdata=locdata.map((e)=>
+     {
+         return {"value":""+e.id,"label":""+e.name};
+    });*/
     let [locations, setLocations] = useState(sdata);
+    let {data: locdata,error,isLoading}=useQuery('locations',getLocations,{suspense:true});
+    useEffect(function(){
+            console.log(locdata);
+            locdata=locdata.map((e)=>{
+                return {
+                    value:e.id,
+                    label:e.city+", "+e.country
+                }
+            });
+            setLocations(locdata);
+    },[isLoading]);
+
     let [selLocation, setSelLocation] = useState('');
     let [locationErr,setLocationErr]=useState(null);
     const [dateErr, setDateErr] = useState();
     let todate = new Date();
-    todate.setDate(todate.getDate() + 7)
+    todate.setDate(todate.getDate() + 7);
+   
     let [search, setSearch] = useState(
         {
             location: "",
@@ -73,7 +100,7 @@ export function SearchComponent() {
     const locationRef = useRef(null);
     return (
         <GridAsymmetrical>
-            <Select
+           <Select
                 label="Location"
                 placeholder="Select Location"
                 searchable
