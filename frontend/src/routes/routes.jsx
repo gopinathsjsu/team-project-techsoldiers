@@ -8,11 +8,12 @@ import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query'
-const Home = lazy(() => import('../pages/Home'));
-const Admin = lazy(() => import('../pages/Admin'))
-const Login = lazy(() => import('../pages/Auth/Login'))
-const Hotel = lazy(() => import('../pages/Hotel'))
-const Listing = lazy(() => import('../pages/Listing'))
+const Home = lazy(() => import('../Pages/Home'));
+const Admin = lazy(() => import('../Pages/Admin'))
+const Login = lazy(() => import('../Pages/Auth/Login'))
+const Hotel = lazy(() => import('../Pages/Hotel'))
+const Listing = lazy(() => import('../Pages/Listing'))
+const Booking = lazy(() => import('../Pages/Booking'))
 /**
  * @component Path 
  * @description Path is component which is the central routes of the whole application. 
@@ -30,6 +31,7 @@ export const Path = () => {
     { path: "/login", element: <Login />},
     { path: "/admin", element: <Admin /> },
     { path: "/listing", element: <Listing />},
+    { path: "/booking", element: <Booking />},
     { path: "/hotel", element: <Hotel />},
     { path: "*", element: <h1>Not Found!</h1> }
 ]
