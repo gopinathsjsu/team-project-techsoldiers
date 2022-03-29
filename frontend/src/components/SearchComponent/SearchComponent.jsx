@@ -15,7 +15,7 @@ const sdata = [
 ];
 function getLocations(){
     return new Promise((resolve,reject)=>{
-            axios.get("http://localhost:3030/api/location").then((res)=>
+            axios.get("/api/location").then((res)=>
             resolve(res.data)).catch((err)=>reject(err));
     });
 }

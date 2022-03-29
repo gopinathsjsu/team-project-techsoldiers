@@ -11,9 +11,16 @@ import { PrismaService } from './services/prisma.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthService } from './services/auth.service';
-
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 @Module({
-  imports: [PassportModule.register({ defaultStrategy: 'jwt' })],
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../../frontend/', 'build'),
+      exclude: ['/api*'],
+    }),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+  ],
   controllers: [
     AppController,
     LocationController,

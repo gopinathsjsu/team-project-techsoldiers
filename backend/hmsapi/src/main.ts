@@ -7,6 +7,7 @@ global['fetch'] = require('node-fetch');
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.setGlobalPrefix('api');
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
   await app.listen(3000);
