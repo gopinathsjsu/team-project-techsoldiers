@@ -1,13 +1,16 @@
 import React, {useState} from "react";
-import { Box, Center, Container, Button, Grid } from "@mantine/core";
+import { Box, Text, Container, Image, Grid } from "@mantine/core";
 import { Link } from "react-router-dom";
 import TopBar from "../../components/TopBar";
-import HotelBooking from "../../components/HotelBooking";
+import Amenities from "../../components/Amenities";
 import { DateRangePicker } from '@mantine/dates';
 import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
 
 
-export function Booking() {
+export function BookingSummary() {
+  const bookings = useSelector(state => state.booking);
+
   const [dateErr, setDateErr] = useState();
   let todate = new Date();
   todate.setDate(todate.getDate() + 7);
@@ -33,7 +36,7 @@ export function Booking() {
         console.log(dayjs(dates[1]).diff(dayjs(dates[0]), 'day'));
     }
   }
-
+console.log(bookings)
   const links = [
     {
       link: "/",
@@ -49,17 +52,31 @@ export function Booking() {
     },
   ];
 
-  const roomtypes = [
+  const hotels = [
     {
       roomtype: "Royal Suite",
+      roomNum: "2",
+      cost: "290",
     },
     {
       roomtype: "Luxury",
+      roomNum: "1",
+      cost: "390",
     },
     {
       roomtype: "Regular",
+      roomNum: "4",
+      cost: "400",
     },
   ];
+
+  // const bookingPosts = bookings.map(post => (
+  //   <div>
+  //     <h3>{post.roomtype}</h3>
+  //     <p>{post.roomCount}</p>
+  //   </div>
+  // ))
+  
 
   return (
     <>
@@ -69,30 +86,10 @@ export function Booking() {
       <Container>
         <Grid mb={30} mt={30}>
           <Grid.Col span={6}>
-            <DateRangePicker
-              label="Hotel Booking Dates"
-              placeholder="Pick dates range"
-              value={[bookDate.date.from, bookDate.date.to]}
-              onChange={(e) => dateChanged(e)}
-              minDate={dayjs(new Date()).toDate()}
-              error={dateErr}
-            />
+            <Text><b>Booking Dates:</b> <span>May 6, 2022 – May 13, 2022</span></Text>
           </Grid.Col>
         </Grid>
-        <Grid mb={30} mt={30}>
-          {
-            roomtypes.map((item, key) => (
-              <Grid.Col span={4}><HotelBooking links={item.roomtype} /></Grid.Col>
-            ))
-          }
-          
-        </Grid>
-        <Link
-          to={{
-            pathname: "/summary",
-            state: roomtypes // your data array of objects
-          }}
-        >CONFIRM</Link>
+        <Amenities links={hotels} />
       </Container>
     </Box>
     </>

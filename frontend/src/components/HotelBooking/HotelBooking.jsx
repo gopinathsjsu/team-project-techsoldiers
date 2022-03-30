@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
-import hotel3 from '../../media/hotel3.jpg'
+import hotel3 from '../../media/hotel3.jpg';
+import { useDispatch } from 'react-redux';
+import {bookingStatus} from '../../features/booking/bookingSlice';
 import { createStyles, Paper, Image, Button, Text, Title, Grid, Center, Group, ActionIcon, NumberInput, InputWrapper } from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
@@ -31,18 +33,16 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-export function HotelBooking({ links }) {
+export function HotelBooking(props) {
   const { classes } = useStyles();
   const countHandlers = useRef(null);
+  const dispatch = useDispatch();
  
-  let [roomcount, setRoomCount] = useState(
-    {
-        count: 1
-    }
-  );
+  let [roomcount, setRoomCount] = useState(1);
   let setCount = function (value) {
-    setRoomCount({ ...roomcount, count: value });
+    setRoomCount(value);
   }
+  console.log(props);
 
   return (
     <Paper
@@ -54,7 +54,7 @@ export function HotelBooking({ links }) {
     >
       <div>
         <Title order={3} className={classes.title}>
-          {links}
+          {props.links}
         </Title>
         <InputWrapper mt={30}>
           <Center>
@@ -65,7 +65,7 @@ export function HotelBooking({ links }) {
               </ActionIcon>
               <NumberInput
                   hideControls
-                  value={roomcount.count}
+                  value={roomcount}
                   onChange={(val) => setCount(val)}
                   handlersRef={countHandlers}
                   max={10}
@@ -80,7 +80,15 @@ export function HotelBooking({ links }) {
           </Center>
         </InputWrapper>
       </div>
-      <Button variant="white" color="dark">
+      <Button variant="white" color="dark" onClick={() => {
+        dispatch(bookingStatus({
+          data: {
+            roomtype: props.links,
+            roomCount: roomcount,
+          },
+          status: "inProgress"
+        }))
+      }}>
         BOOK NOW
       </Button>
     </Paper>

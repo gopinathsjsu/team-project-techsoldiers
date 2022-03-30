@@ -14,6 +14,7 @@ const Login = lazy(() => import('../Pages/Auth/Login'))
 const Hotel = lazy(() => import('../Pages/Hotel'))
 const Listing = lazy(() => import('../Pages/Listing'))
 const Booking = lazy(() => import('../Pages/Booking'))
+const BookingSummary = lazy(() => import('../Pages/BookingSummary'))
 /**
  * @component Path 
  * @description Path is component which is the central routes of the whole application. 
@@ -32,6 +33,7 @@ export const Path = () => {
     { path: "/admin", element: <Admin /> },
     { path: "/listing", element: <Listing />},
     { path: "/booking", element: <Booking />},
+    { path: "/summary", element: <BookingSummary />},
     { path: "/hotel", element: <Hotel />},
     { path: "*", element: <h1>Not Found!</h1> }
 ]

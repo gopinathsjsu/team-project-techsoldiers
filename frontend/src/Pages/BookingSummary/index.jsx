@@ -1,0 +1,1 @@
+export { BookingSummary as default } from '../BookingSummary/BookingSummary'
