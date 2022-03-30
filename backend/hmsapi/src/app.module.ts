@@ -11,6 +11,8 @@ import { PrismaService } from './services/prisma.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthService } from './services/auth.service';
+import { BookingController } from './controllers/booking.controller';
+import { BookingService } from './services/booking.service';
 
 @Module({
   imports: [PassportModule.register({ defaultStrategy: 'jwt' })],
@@ -19,6 +21,7 @@ import { AuthService } from './services/auth.service';
     LocationController,
     HotelController,
     AuthController,
+    BookingController,
   ],
   providers: [
     PrismaService,
@@ -28,6 +31,7 @@ import { AuthService } from './services/auth.service';
     AuthConfig,
     JwtStrategy,
     AuthService,
+    BookingService,
   ],
 })
 export class AppModule {}
