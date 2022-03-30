@@ -6,9 +6,9 @@ import { PrismaService } from './services/prisma.service';
 global['fetch'] = require('node-fetch');
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: true});
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
-  await app.listen(3000);
+  await app.listen(3030);
 }
 bootstrap();

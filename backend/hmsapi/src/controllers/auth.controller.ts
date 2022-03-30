@@ -1,7 +1,7 @@
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -30,11 +30,8 @@ export class AuthController {
     @Body()
     registerRequest: {
       email: string;
+      name: string;
       password: string;
-      given_name: string;
-      family_name: string;
-      birthdate: string;
-      gender: string;
     },
   ) {
     try {

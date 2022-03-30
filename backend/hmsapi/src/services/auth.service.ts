@@ -44,12 +44,9 @@ export class AuthService {
   registerUser(newUser: {
     email: string;
     password: string;
-    given_name: string;
-    family_name: string;
-    birthdate: string;
-    gender: string;
+    name: string;
   }) {
-    const { email, password, given_name, birthdate, gender, family_name } =
+    const { email, password, name } =
       newUser;
     const data = {};
     return new Promise((resolve, reject) => {
@@ -58,10 +55,7 @@ export class AuthService {
         password,
         [
           new CognitoUserAttribute({ Name: 'email', Value: email }),
-          new CognitoUserAttribute({ Name: 'given_name', Value: given_name }),
-          new CognitoUserAttribute({ Name: 'family_name', Value: family_name }),
-          new CognitoUserAttribute({ Name: 'birthdate', Value: birthdate }),
-          new CognitoUserAttribute({ Name: 'gender', Value: gender }),
+          new CognitoUserAttribute({ Name: 'name', Value: name }),
           new CognitoUserAttribute({
             Name: 'updated_at',
             Value: Date.now().toString(),
@@ -78,6 +72,7 @@ export class AuthService {
               status: 'success',
             };
             resolve(data);
+            
           }
         },
       );
@@ -101,8 +96,9 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       newUser.authenticateUser(authenticationDetails, {
         onSuccess: (result) => {
-          const data = { token: { jwtToken: result.getIdToken().getJwtToken(), refreshToken: result.getRefreshToken().getToken(), accessToken: result.getAccessToken().getJwtToken() } }
-          resolve(data);
+          // Tried destructing the data but was not needed for this api. 
+          //const data = { token: { jwtToken: result.getIdToken().getJwtToken(), refreshToken: result.getRefreshToken().getToken(), accessToken: result.getAccessToken().getJwtToken() } }
+          resolve(result);
         },
         onFailure: (err) => {
           console.log(err);
