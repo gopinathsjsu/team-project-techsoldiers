@@ -9,4 +9,12 @@ export class BookingService {
     return this.prisma.booking.findMany({});
   }
 
+  async bookingById(
+    bookingWhereUniqueInput: Prisma.BookingWhereUniqueInput,
+  ): Promise<Booking | null> {
+    return this.prisma.booking.findUnique({
+      where: bookingWhereUniqueInput,
+    });
+  }
+
 }

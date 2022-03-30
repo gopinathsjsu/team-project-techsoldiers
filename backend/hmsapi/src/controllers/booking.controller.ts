@@ -10,4 +10,8 @@ export class BookingController {
     return this.bookingService.bookings();
   } 
 
+  @Get('/:id')
+  async getHotelById(@Param('id') id: string): Promise<BookingModel> {
+    return this.bookingService.bookingById({ id: Number(id) });
+  }  
 }
