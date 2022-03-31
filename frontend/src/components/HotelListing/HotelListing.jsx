@@ -32,7 +32,7 @@ const useStyles = createStyles((theme) => ({
 //     avatar: string;
 //   };
 // }
-export const HotelListing =  () => {
+export const HotelListing =  (props) => {
   const [opened, setOpened] = useState(false);
   const { classes } = useStyles();
   const links = [
@@ -61,13 +61,16 @@ export const HotelListing =  () => {
       label: "Coffee maker/tea service",
     },
   ];
+
+
+  console.log(props.links)
   return (
     <Card withBorder radius="md" p={0} className={classes.card} mb="md">
       <Group noWrap spacing={0}>
         <Image src={hotel2} height={170} width={300} p={20} />
         <div className={classes.body}>
             <Text className={classes.title} transform="uppercase">
-                Hotel Name
+                {props.link.name}
             </Text>
             <Text color="dimmed" weight={700} size="xs" mb="md">
                 Address

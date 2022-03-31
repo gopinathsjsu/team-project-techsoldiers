@@ -1,0 +1,1 @@
+export { Amenities as default } from './Amenities'
