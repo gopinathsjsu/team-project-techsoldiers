@@ -13,6 +13,9 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthService } from './services/auth.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { BookingController } from './controllers/booking.controller';
+import { BookingService } from './services/booking.service';
+
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -26,6 +29,7 @@ import { join } from 'path';
     LocationController,
     HotelController,
     AuthController,
+    BookingController,
   ],
   providers: [
     PrismaService,
@@ -35,6 +39,7 @@ import { join } from 'path';
     AuthConfig,
     JwtStrategy,
     AuthService,
+    BookingService,
   ],
 })
 export class AppModule {}
