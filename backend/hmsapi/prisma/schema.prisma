@@ -26,6 +26,7 @@ model Hotel {
   description String
   hotelRooms  HotelRoom[]
   Employee    Employee[]
+  booking Booking[]
 }
 
 model Room {
@@ -91,9 +92,11 @@ model Booking {
   bookingFromDate      DateTime
   status               String
   customerId           Int
-  customer             Customer               @relation(fields: [customerId], references: [customerId])
+  customer             Customer?              @relation(fields: [customerId], references: [customerId])
   bookingRoomAmenities BookingRoomAmenities[]
   totalPrice           Decimal
+  hotelId Int
+  hotel Hotel  @relation(fields: [hotelId], references: [id])
 
 }
 
