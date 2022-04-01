@@ -17,4 +17,20 @@ export class BookingService {
     });
   }
 
+  async bookingsByHotelId(params: { 
+  where?: Prisma.BookingWhereInput; 
+     }): Promise<Booking[]> { 
+    const { where } = params; 
+    return this.prisma.booking.findMany({ 
+    where, 
+    }); 
+  } 
+    
+    async createBooking(data: Prisma.BookingCreateInput): Promise<Booking> { 
+    return this.prisma.booking.create({ 
+    data, 
+    }); 
+   } 
+
 }
+  
