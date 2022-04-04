@@ -16,15 +16,15 @@ import { join } from 'path';
 import { BookingController } from './controllers/booking.controller';
 import { BookingService } from './services/booking.service';
 import { ConfigModule } from '@nestjs/config';
-
-
-
+/* eslint-disable */ 
 @Module({
-  imports: [ ServeStaticModule.forRoot({
-    rootPath: join(__dirname, '../../../frontend/', 'build'),
-    exclude: ['/api*'],
-  }),
-  PassportModule.register({ defaultStrategy: 'jwt' }), ConfigModule.forRoot()],
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../../frontend/', 'build'),
+      exclude: ['/api*']
+      }), 
+        PassportModule.register({ defaultStrategy: 'jwt' }), ConfigModule.forRoot()
+    ],
   controllers: [
     AppController,
     LocationController,

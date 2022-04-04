@@ -1,7 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { BookingService } from 'src/services/booking.service';
 import { Booking as BookingModel } from '.prisma/client';
-@Controller('api/booking')
+@Controller('booking')
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
