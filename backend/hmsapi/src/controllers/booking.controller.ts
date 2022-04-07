@@ -1,8 +1,8 @@
-import { Controller, Get, Param , Body,Post} from '@nestjs/common';
+import { Controller, Get, Param, Body, Post ,Put} from '@nestjs/common';
 import { BookingService } from 'src/services/booking.service';
 import { Booking as BookingModel } from '.prisma/client';
 import { BookingRequest } from 'src/models/BookingRequest';
-@Controller('api/booking')
+@Controller('booking')
 export class BookingController {
     constructor(private readonly bookingService: BookingService) { }
 
@@ -42,6 +42,15 @@ export class BookingController {
             customer: {
                 connect: { customerId: Number(customerId) },
             }
+        });
+
+    }
+
+    @Put('/:id')
+    async cancelBooking(@Param('id') id: string): Promise<BookingModel> {
+        return this.bookingService.updateBooking({
+            where: { id: Number(id) },
+            data: { status: "Cancel" },
         });
 
     }
