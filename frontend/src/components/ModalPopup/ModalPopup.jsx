@@ -29,18 +29,9 @@ const useStyles = createStyles((theme) => ({
 //     avatar: string;
 //   };
 // }
-export const ModalPopup =  ({ links }) => {
+export const ModalPopup =  (props) => {
   const [opened, setOpened] = useState(false);
   const { classes } = useStyles();
-
-  const items = links.map((link) => (
-    <span
-      key={link.label}
-      className={classes.link}
-    >
-      {link.label}
-    </span>
-  ));
 
   return (
         <>
@@ -52,7 +43,7 @@ export const ModalPopup =  ({ links }) => {
             <Modal
                 opened={opened}
                 onClose={() => setOpened(false)}
-                title="Overview"
+                title={props.links.name}
                 size='80%'
                 transition="fade"
                 transitionDuration={600}
@@ -60,13 +51,13 @@ export const ModalPopup =  ({ links }) => {
             >
                 {/* Modal content */}
                 <Text size="sm" mb={20}>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                    {props.links.description}
                 </Text>
                 <Text size='md' borderBottom='1px solid rgb(233, 236, 239)' mb={20}>
                     Amenities
                 </Text>
-                <Group>
+                <Button variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }}>Book Hotel</Button>
+                {/* <Group>
                     <List>
                         {
                             links.map((item, key) => (
@@ -75,7 +66,7 @@ export const ModalPopup =  ({ links }) => {
                         }
                     </List>
 
-                </Group>
+                </Group> */}
             </Modal>
         </>
     );

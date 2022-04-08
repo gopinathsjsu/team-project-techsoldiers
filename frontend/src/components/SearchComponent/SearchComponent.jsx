@@ -7,6 +7,8 @@ import { Button, NumberInput, Group, ActionIcon, InputWrapper, Center, Grid, Con
 import { DateRangePicker } from '@mantine/dates';
 import axios from 'axios';
 import { useQuery } from 'react-query'
+import { useNavigate } from 'react-router-dom';
+import { locationHotelState } from '../../features/locationhotel/locationHotelSlice';
 
 const sdata = [
     { value: 'LAX', label: 'Los Angeles' },
@@ -26,6 +28,7 @@ export  function SearchComponent() {
         padding: '1.6em'
     };
     
+    const navigate = useNavigate();
 
   /*  locdata=locdata.map((e)=>
      {
@@ -34,7 +37,7 @@ export  function SearchComponent() {
     let [locations, setLocations] = useState(sdata);
     let {data: locdata,error,isLoading}=useQuery('locations',getLocations,{suspense:true});
     useEffect(function(){
-            console.log(locdata);
+           // console.log(locdata);
             locdata=locdata.map((e)=>{
                 return {
                     value:e.id,
@@ -92,7 +95,14 @@ export  function SearchComponent() {
             return;
         }
         console.log(search);
+        locationHotelState({
+            date: search.date,
+            person: search.persons
+        });
+        navigate(`location/${search.location}`);
     }
+
+
     let setPersonCount = function (value) {
         setSearch({ ...search, persons: value });
     }
