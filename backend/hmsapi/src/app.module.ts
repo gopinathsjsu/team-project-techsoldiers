@@ -16,6 +16,10 @@ import { join } from 'path';
 import { BookingController } from './controllers/booking.controller';
 import { BookingService } from './services/booking.service';
 import { ConfigModule } from '@nestjs/config';
+import { RoomController } from './controllers/room.controller';
+import { AmenitiesController } from './controllers/amenities.controller';
+import { RoomService } from './services/room.service';
+import { AmenitiesService } from './services/amenities.service';
 
 
 
@@ -31,6 +35,8 @@ import { ConfigModule } from '@nestjs/config';
     HotelController,
     AuthController,
     BookingController,
+    RoomController,
+    AmenitiesController,
   ],
   providers: [
     PrismaService,
@@ -41,6 +47,8 @@ import { ConfigModule } from '@nestjs/config';
     JwtStrategy,
     AuthService,
     BookingService,
+    RoomService,
+    AmenitiesService,
   ],
 })
 export class AppModule {}

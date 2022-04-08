@@ -14,6 +14,10 @@ export class HotelService {
   ): Promise<Hotel | null> {
     return this.prisma.hotel.findUnique({
       where: hotelWhereUniqueInput,
+      include: { 
+        hotelRooms:true,
+        booking:true
+      }
     });
   }
 
