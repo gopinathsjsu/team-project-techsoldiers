@@ -16,7 +16,7 @@ export class HotelService {
       where: hotelWhereUniqueInput,
       include: { 
         hotelRooms:true,
-        booking:true
+        location:true
       }
     });
   }

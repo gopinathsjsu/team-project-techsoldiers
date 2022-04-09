@@ -29,7 +29,7 @@ export class HotelController {
   }
   
   @Post()
-    async createBooking(
+    async createHotel(
         @Body() hotelData: HotelRequest,
     ): Promise<HotelModel> {
         const { name, locationId, description} = hotelData;

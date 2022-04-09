@@ -16,4 +16,10 @@ export class LocationService {
       where: locationWhereUniqueInput,
     });
   }
+
+  async createLocation(data: Prisma.LocationCreateInput): Promise<Location> {
+    return this.prisma.location.create({
+        data,
+    });
+}
 }
