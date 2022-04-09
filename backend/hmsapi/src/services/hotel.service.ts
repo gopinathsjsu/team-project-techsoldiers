@@ -31,4 +31,10 @@ export class HotelService {
       });
     }
 
+    async createHotel(data: Prisma.HotelCreateInput): Promise<Hotel> {
+      return this.prisma.hotel.create({
+          data,
+      });
+  }
+
 }

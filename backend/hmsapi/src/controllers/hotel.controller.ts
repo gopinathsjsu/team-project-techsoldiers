@@ -1,6 +1,7 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param,Post,Body } from '@nestjs/common';
 import { HotelService } from 'src/services/hotel.service';
 import { Hotel as HotelModel } from '.prisma/client';
+import { HotelRequest } from 'src/models/HotelRequest';
 @Controller('hotel')
 export class HotelController {
   constructor(private readonly hotelService: HotelService) {}
@@ -27,5 +28,20 @@ export class HotelController {
       });
   }
   
+  @Post()
+    async createBooking(
+        @Body() hotelData: HotelRequest,
+    ): Promise<HotelModel> {
+        const { name, locationId, description} = hotelData;
+        return await this.hotelService.createHotel({
+          name,
+            description,
+            location: {
+                connect: { id: Number(locationId) },
+            }
+           
+        });
+
+    }
 
 }
