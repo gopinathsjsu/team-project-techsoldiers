@@ -24,7 +24,7 @@ export const Path = () => {
     { path: "/", element: <Home />, index: true },
     { path: "/login", element: <Login />},
     { path: "/admin", element: <Admin /> },
-    { path: "/listing", element: <Listing />},
+    { path: "/location/:locationID", element: <Listing />},
     { path: "/booking", element: <Booking />},
     { path: "/summary", element: <BookingSummary />},
     { path: "/hotel", element: <Hotel />},

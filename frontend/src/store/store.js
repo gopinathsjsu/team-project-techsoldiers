@@ -5,6 +5,7 @@ import { persistCombineReducers, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGIST
 import counterReducer from '../features/counter/counterSlice';
 import loginReducer from '../features/auth/loginSlice';
 import registerReducer from "../features/auth/registerSlice";
+import locationHotelReducer from "../features/locationhotel/locationHotelSlice";
 
 const persistConfig = {
   key: 'root',
@@ -23,6 +24,7 @@ export const store = configureStore({
   reducer: {
     counter: counterReducer,
     register: registerReducer,
+    locationhotel: locationHotelReducer,
     persistedReducer
   },
   middleware: (getDefaultMiddleware) =>

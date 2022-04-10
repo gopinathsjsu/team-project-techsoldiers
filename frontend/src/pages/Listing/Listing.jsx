@@ -1,17 +1,14 @@
 import React from "react";
-import { Box, Center, Container, Image } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { Box, Container, Image, Text } from "@mantine/core";
+import { useParams } from "react-router-dom";
 import TopBar from "../../components/TopBar";
 import HotelListing from "../../components/HotelListing";
 import hotel1 from '../../media/hotel1.jpg';
-import { useQuery, QueryClient  } from "react-query";
-import { getHotelsByLocationId } from '../../services/HotelService';
-
 
 
 export function Listing() {
 
-  const queryClient = new QueryClient();
+  const { locationID } = useParams();
 
   const links = [
     {
@@ -28,20 +25,7 @@ export function Listing() {
     },
   ];
 
-const prefetchData = async () => {
-  await queryClient.prefetchQuery('hotelByLocation', getHotelsByLocationId(1));
-}
-  
-// whenever you are using params or parameter for getting the data use this kind of format
-const { data, isLoading, isError, error } = useQuery(['hotelByLocation'],prefetchData, {
-  initialData: {
-    data: []
-  }
-});
-
-if(isLoading){
-  return (<div>Loading....</div>)
-}else{
+if(locationID){
   return (
     <>
     <TopBar links={links} />
@@ -49,15 +33,21 @@ if(isLoading){
     <Box>
       <Image src={hotel1} height={300} width='lg' mb={30} />
       <Container>
-        {
-            data.data.map((item, key) => (
-              <HotelListing links={item} key={key} />
-            ))
-          }
-        
+          <HotelListing location={locationID} />  
       </Container>
     </Box>
     </>
   );
+}else {
+  return (
+    <>
+      <TopBar links={links} />
+      <Box>
+        <Container>
+          <Text>No Hotels found at this location!!</Text>
+        </Container>
+      </Box>
+    </>
+  )}
 }
-}
+

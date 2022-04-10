@@ -2,7 +2,7 @@ import axiosClient from "./axios";
 
 export function getHotelsByLocationId(id){
 
-    return axiosClient.get('/hotel/location/'+id);
+    return axiosClient.get('api/hotel/location/'+id);
     
 }
 
