@@ -16,6 +16,9 @@ export class RoomService {
         const { where } = params;
         return this.prisma.hotelRoom.findMany({
           where,
+          include: {
+            room :true
+          }
       
         });
       }
