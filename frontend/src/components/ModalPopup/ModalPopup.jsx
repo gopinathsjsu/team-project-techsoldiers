@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import placeholder from '../../placeholder.png';
 import logo from '../../logo.svg';
-import { createStyles, List, Image, Button, Text, Group, Modal, ListItem } from '@mantine/core';
+import { createStyles, List, Image, Button, Text, Group, Modal, ListItem, Skeleton } from '@mantine/core';
+import { useQuery } from "react-query";
+import { getAmenityByHotelId } from '../../services/AmenityService';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -33,6 +35,47 @@ export const ModalPopup =  (props) => {
   const [opened, setOpened] = useState(false);
   const { classes } = useStyles();
 
+  const { data, isError, isLoading, isFetching } = useQuery('amenityByHotel',getAmenityByHotelId);
+  console.log(data);
+//   data.data.map((item, key) => (
+//     console.log(item);
+//   ));
+
+if(isLoading || isFetching){
+    return(
+        <Skeleton visible={true}>
+            <Modal
+                    opened={opened}
+                    onClose={() => setOpened(false)}
+                    title={props.links.name}
+                    size='50%'
+                    transition="fade"
+                    transitionDuration={600}
+                    transitionTimingFunction="ease"
+                >
+                    {/* Modal content */}
+                    <Text size="sm" mb={20}>
+                        {props.links.description}
+                    </Text>
+                    <Text size='md' borderBottom='1px solid rgb(233, 236, 239)' mb={20}>
+                        Amenities
+                    </Text>
+                    <Button variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }}>Book Hotel</Button>
+                    <Group>
+                        {/* <List>
+                            {
+                                data.map((item, key) => (
+                                    <ListItem key={key}>{item.name}</ListItem>
+                                ))
+                            }
+                        </List> */}
+
+                    </Group>
+                </Modal>
+        </Skeleton>
+    )
+}
+
   return (
         <>
             <Group withBorder p={10} noWrap spacing={0} style={{display: 'block', textAlign: 'right', borderTop: '1px solid #e9ecef'}}>
@@ -44,7 +87,7 @@ export const ModalPopup =  (props) => {
                 opened={opened}
                 onClose={() => setOpened(false)}
                 title={props.links.name}
-                size='80%'
+                size='50%'
                 transition="fade"
                 transitionDuration={600}
                 transitionTimingFunction="ease"
@@ -53,20 +96,19 @@ export const ModalPopup =  (props) => {
                 <Text size="sm" mb={20}>
                     {props.links.description}
                 </Text>
-                <Text size='md' borderBottom='1px solid rgb(233, 236, 239)' mb={20}>
+                <Text size='md' borderBottom='1px solid rgb(233, 236, 239)' mb={10}>
                     Amenities
                 </Text>
-                <Button variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }}>Book Hotel</Button>
-                {/* <Group>
+                <Group>
                     <List>
                         {
-                            links.map((item, key) => (
-                                <ListItem key={key}>{item.label}</ListItem>
+                            data.data.map((item, key) => (
+                                <ListItem key={key}>{item.name}</ListItem>
                             ))
                         }
                     </List>
-
-                </Group> */}
+                </Group>
+                <Button mt={40} variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }}>Book Hotel</Button>
             </Modal>
         </>
     );

@@ -6,6 +6,7 @@ import { createStyles, Card, Image, Text, Group, Skeleton } from '@mantine/core'
 import { useQuery } from "react-query";
 import ModalPopup from "../ModalPopup";
 import { getHotelsByLocationId } from '../../services/HotelService';
+import { getRoomTypeByHotelId } from '../../services/RoomService';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -26,6 +27,7 @@ const useStyles = createStyles((theme) => ({
 export const HotelListing =  (props) => {
   const [opened, setOpened] = useState(false);
   const { classes } = useStyles();
+  const [hotelId, setHotelId] = useState();
 
   const [hotelData, setHotelData] = useState(null);
 
@@ -57,9 +59,16 @@ export const HotelListing =  (props) => {
   ];
 
   const { data, isError, isLoading, isFetching } = useQuery(['hotelByLocation', props.location],() => getHotelsByLocationId(props.location));
-  console.log(isLoading);
-  console.log(data);
-  // useEffect(() => {
+
+  // data.data.map((item, key) => (
+  //   setHotelId(item.id)
+  // ));
+
+  const { data:dataRoomtype, isErrorRoomtype, isLoadingRoomtype, isFetchingRoomtype } = useQuery(['roomTypeByHotel', 1],() => getRoomTypeByHotelId(1));
+ 
+  console.log(dataRoomtype);
+  
+  
 
   //   setHotelData(data);
   //   console.log(data);
@@ -78,6 +87,15 @@ if(isLoading || isFetching){
             <Text color="dimmed" weight={700} size="xs" mb="md">
                 Address
             </Text>
+            <Group noWrap spacing="xs" pb={10}>
+                <Group spacing="xs" noWrap>
+                <Text size="xs">Room Type:</Text><Text size="xs" color="dimmed">Luxury</Text>
+                </Group>
+                <Text size="xs" color="dimmed">
+                    |
+                </Text>
+                <Text size="xs">Price:</Text><Text size="xs" color="dimmed">$<span>45</span>/night</Text>
+            </Group>
             <Text size="sm">
             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
             </Text>
@@ -101,6 +119,15 @@ return (
               <Text color="dimmed" weight={700} size="xs" mb="md">
                   Address
               </Text>
+              <Group noWrap spacing="xs" pb={10}>
+                  <Group spacing="xs" noWrap>
+                  <Text size="xs">Room Type:</Text><Text size="xs" color="dimmed">Luxury</Text>
+                  </Group>
+                  <Text size="xs" color="dimmed">
+                      |
+                  </Text>
+                  <Text size="xs">Price:</Text><Text size="xs" color="dimmed">$<span>45</span>/night</Text>
+              </Group>
               <Text size="sm">
               {item.description}
               </Text>
