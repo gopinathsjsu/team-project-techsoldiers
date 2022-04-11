@@ -16,21 +16,25 @@ import { join } from 'path';
 import { BookingController } from './controllers/booking.controller';
 import { BookingService } from './services/booking.service';
 import { ConfigModule } from '@nestjs/config';
-/* eslint-disable */ 
+import { PricingController } from './controllers/pricing.controller';
+import { PricingService } from './services/pricing.service';
+/* eslint-disable */
 @Module({
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../../frontend/', 'build'),
-      exclude: ['/api*']
-      }), 
-        PassportModule.register({ defaultStrategy: 'jwt' }), ConfigModule.forRoot()
-    ],
+      exclude: ['/api*'],
+    }),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    ConfigModule.forRoot(),
+  ],
   controllers: [
     AppController,
     LocationController,
     HotelController,
     AuthController,
     BookingController,
+    PricingController,
   ],
   providers: [
     PrismaService,
@@ -41,6 +45,7 @@ import { ConfigModule } from '@nestjs/config';
     JwtStrategy,
     AuthService,
     BookingService,
+    PricingService
   ],
 })
 export class AppModule {}
