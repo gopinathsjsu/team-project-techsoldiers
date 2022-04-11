@@ -71,8 +71,6 @@ export class PricingController {
     const endDate: Date = new Date(dateRange.endDate);
     Object.keys(prices).forEach((e) => {
       console.log('result', prices[e]);
-
-      endDate.setDate(endDate.getDate() + 5);
       const pricing: Pricing = {
         basePrice: 250,
         startDate: startDate,
