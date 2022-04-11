@@ -20,6 +20,8 @@ import { RoomController } from './controllers/room.controller';
 import { AmenitiesController } from './controllers/amenities.controller';
 import { RoomService } from './services/room.service';
 import { AmenitiesService } from './services/amenities.service';
+import { CustomerController } from './controllers/customer.controller';
+import { CustomerService } from './services/customer.service';
 
 
 
@@ -37,6 +39,7 @@ import { AmenitiesService } from './services/amenities.service';
     BookingController,
     RoomController,
     AmenitiesController,
+    CustomerController,
   ],
   providers: [
     PrismaService,
@@ -49,6 +52,7 @@ import { AmenitiesService } from './services/amenities.service';
     BookingService,
     RoomService,
     AmenitiesService,
+    CustomerService
   ],
 })
 export class AppModule {}
