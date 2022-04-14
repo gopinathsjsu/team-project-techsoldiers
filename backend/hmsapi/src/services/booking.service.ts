@@ -14,6 +14,9 @@ export class BookingService {
     ): Promise<Booking | null> {
         return this.prisma.booking.findUnique({
             where: bookingWhereUniqueInput,
+            include :{
+                hotel :true
+            }
         });
     }
 
@@ -23,6 +26,7 @@ export class BookingService {
         const { where } = params;
         return this.prisma.booking.findMany({
             where,
+
         });
     }
 
