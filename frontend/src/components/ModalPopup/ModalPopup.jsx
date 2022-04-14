@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import placeholder from '../../placeholder.png';
 import logo from '../../logo.svg';
 import { createStyles, List, Image, Button, Text, Group, Modal, ListItem } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -32,6 +33,7 @@ const useStyles = createStyles((theme) => ({
 export const ModalPopup =  (props) => {
   const [opened, setOpened] = useState(false);
   const { classes } = useStyles();
+  const navigate = useNavigate();
 
   return (
         <>
@@ -56,7 +58,10 @@ export const ModalPopup =  (props) => {
                 <Text size='md' borderBottom='1px solid rgb(233, 236, 239)' mb={20}>
                     Amenities
                 </Text>
-                <Button variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }}>Book Hotel</Button>
+                <Button variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }} onClick={ () => {
+
+                    navigate(`/hotel/${props.links.id}/rooms`);
+                }}>Book Hotel</Button>
                 {/* <Group>
                     <List>
                         {

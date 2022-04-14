@@ -1,16 +1,22 @@
 import React, {useState} from "react";
 import { Box, Center, Container, Button, Grid } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import TopBar from "../../components/TopBar";
 import HotelBooking from "../../components/HotelBooking";
 import { DateRangePicker } from '@mantine/dates';
 import dayjs from 'dayjs';
+import { useQuery } from "react-query";
 
 
 export function Booking() {
   const [dateErr, setDateErr] = useState();
+
+  const { hotelID } = useParams();
+
   let todate = new Date();
   todate.setDate(todate.getDate() + 7);
+
+
   
   let [bookDate, setBookDate] = useState(
       {
@@ -61,6 +67,8 @@ export function Booking() {
     },
   ];
 
+  
+
   return (
     <>
     <TopBar links={links} />
@@ -79,20 +87,9 @@ export function Booking() {
             />
           </Grid.Col>
         </Grid>
-        <Grid mb={30} mt={30}>
-          {
-            roomtypes.map((item, key) => (
-              <Grid.Col span={4}><HotelBooking links={item.roomtype} /></Grid.Col>
-            ))
-          }
-          
+        <Grid mb={30} mt={30}> 
+          <HotelBooking hotel={hotelID} />
         </Grid>
-        <Link
-          to={{
-            pathname: "/summary",
-            state: roomtypes // your data array of objects
-          }}
-        >CONFIRM</Link>
       </Container>
     </Box>
     </>

@@ -6,7 +6,7 @@ const Admin = lazy(() => import('../pages/Admin'))
 const Login = lazy(() => import('../pages/Auth/Login'))
 const Hotel = lazy(() => import('../pages/Hotel'))
 const Listing = lazy(() => import('../pages/Listing'))
-const Booking = lazy(() => import('../pages/Booking'))
+const Room = lazy(() => import('../pages/Booking'))
 const BookingSummary = lazy(() => import('../pages/BookingSummary'))
 /**
  * @component Path 
@@ -25,7 +25,7 @@ export const Path = () => {
     { path: "/login", element: <Login />},
     { path: "/admin", element: <Admin /> },
     { path: "/location/:locationID", element: <Listing />},
-    { path: "/booking", element: <Booking />},
+    { path: "/hotel/:hotelID/rooms", element: <Room />},
     { path: "/summary", element: <BookingSummary />},
     { path: "/hotel", element: <Hotel />},
     { path: "*", element: <h1>Not Found!</h1> }
