@@ -12,7 +12,7 @@ export const locationHotelSlice = createSlice({
       // can add more reducers
       locationHotelState: (state, action) => {
         state.status = "prebook";
-        state.data = action.payload.data;
+        state.data = action.payload;
       }
     },
   })

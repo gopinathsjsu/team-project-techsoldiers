@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useQuery } from 'react-query'
 import { useNavigate } from 'react-router-dom';
 import { locationHotelState } from '../../features/locationhotel/locationHotelSlice';
+import { useDispatch } from 'react-redux';
 
 const sdata = [
     { value: 'LAX', label: 'Los Angeles' },
@@ -29,6 +30,7 @@ export  function SearchComponent() {
     };
     
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
   /*  locdata=locdata.map((e)=>
      {
@@ -95,10 +97,10 @@ export  function SearchComponent() {
             return;
         }
         console.log(search);
-        locationHotelState({
+        dispatch(locationHotelState({
             date: search.date,
             person: search.persons
-        });
+        }));
         navigate(`location/${search.location}`);
     }
 

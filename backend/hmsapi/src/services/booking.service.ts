@@ -4,10 +4,10 @@ import { PrismaService } from './prisma.service';
 
 @Injectable()
 export class BookingService {
-    constructor(private prisma: PrismaService) { }
-    async bookings(): Promise<Booking[] | null> {
-        return this.prisma.booking.findMany({});
-    }
+  constructor(private prisma: PrismaService) {}
+  async bookings(): Promise<Booking[] | null> {
+    return this.prisma.booking.findMany({});
+  }
 
     async bookingById(
         bookingWhereUniqueInput: Prisma.BookingWhereUniqueInput,
@@ -30,21 +30,20 @@ export class BookingService {
         });
     }
 
-    async createBooking(data: Prisma.BookingCreateInput): Promise<Booking> {
-        return this.prisma.booking.create({
-            data,
-        });
-    }
+  async createBooking(data: Prisma.BookingCreateInput): Promise<Booking> {
+    return this.prisma.booking.create({
+      data,
+    });
+  }
 
-    async updateBooking(params: {
-        where: Prisma.BookingWhereUniqueInput;
-        data: Prisma.BookingUpdateInput;
-    }): Promise<Booking> {
-        const { where, data } = params;
-        return this.prisma.booking.update({
-            data,
-            where,
-        });
-    }
-
+  async updateBooking(params: {
+    where: Prisma.BookingWhereUniqueInput;
+    data: Prisma.BookingUpdateInput;
+  }): Promise<Booking> {
+    const { where, data } = params;
+    return this.prisma.booking.update({
+      data,
+      where,
+    });
+  }
 }

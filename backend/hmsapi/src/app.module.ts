@@ -25,12 +25,18 @@ import { CustomerService } from './services/customer.service';
 
 
 
+import { PricingController } from './controllers/pricing.controller';
+import { PricingService } from './services/pricing.service';
+/* eslint-disable */
 @Module({
-  imports: [ ServeStaticModule.forRoot({
-    rootPath: join(__dirname, '../../../frontend/', 'build'),
-    exclude: ['/api*'],
-  }),
-  PassportModule.register({ defaultStrategy: 'jwt' }), ConfigModule.forRoot()],
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../../frontend/', 'build'),
+      exclude: ['/api*'],
+    }),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    ConfigModule.forRoot(),
+  ],
   controllers: [
     AppController,
     LocationController,
@@ -40,19 +46,21 @@ import { CustomerService } from './services/customer.service';
     RoomController,
     AmenitiesController,
     CustomerController,
+    PricingController,
   ],
   providers: [
     PrismaService,
-    AppService,
     LocationService,
-    HotelService,
     AuthConfig,
     JwtStrategy,
     AuthService,
     BookingService,
+    HotelService,
     RoomService,
     AmenitiesService,
-    CustomerService
+    CustomerService,
+    PricingService,
+    AppService
   ],
 })
 export class AppModule {}
