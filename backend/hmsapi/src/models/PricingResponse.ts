@@ -3,4 +3,5 @@ export interface PricingResponse {
   startDate: Date;
   endDate: Date;
   prices: number[];
+  finalPrice: number;
 }

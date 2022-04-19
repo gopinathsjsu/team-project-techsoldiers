@@ -23,10 +23,9 @@ import { AmenitiesService } from './services/amenities.service';
 import { CustomerController } from './controllers/customer.controller';
 import { CustomerService } from './services/customer.service';
 
-
-
 import { PricingController } from './controllers/pricing.controller';
 import { PricingService } from './services/pricing.service';
+import { HotelRoomService } from './services/hotelroom.service';
 /* eslint-disable */
 @Module({
   imports: [
@@ -37,17 +36,7 @@ import { PricingService } from './services/pricing.service';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     ConfigModule.forRoot(),
   ],
-  controllers: [
-    AppController,
-    LocationController,
-    HotelController,
-    AuthController,
-    BookingController,
-    RoomController,
-    AmenitiesController,
-    CustomerController,
-    PricingController,
-  ],
+  controllers: [AppController, LocationController, HotelController, AuthController, BookingController, RoomController, AmenitiesController, CustomerController, PricingController],
   providers: [
     PrismaService,
     LocationService,
@@ -56,11 +45,12 @@ import { PricingService } from './services/pricing.service';
     AuthService,
     BookingService,
     HotelService,
+    HotelRoomService,
     RoomService,
     AmenitiesService,
     CustomerService,
     PricingService,
-    AppService
+    AppService,
   ],
 })
 export class AppModule {}

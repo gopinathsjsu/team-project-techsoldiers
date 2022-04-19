@@ -14,28 +14,14 @@ export class PricingUtility {
     if (pType.strategyType == 1) {
       strategy = new DayStrategy(pType.DayType, Number(pType.priceFactor));
     } else {
-      console.log(
-        new Date(pType.fromDate).toLocaleDateString() +
-          '  : ' +
-          new Date(pType.endDate).toLocaleDateString(),
-      );
-      strategy = new SeasonStrategy(
-        new Date(pType.fromDate),
-        new Date(pType.endDate),
-        Number(pType.priceFactor),
-      );
+      console.log(new Date(pType.fromDate).toLocaleDateString() + '  : ' + new Date(pType.endDate).toLocaleDateString());
+      strategy = new SeasonStrategy(new Date(pType.fromDate), new Date(pType.endDate), Number(pType.priceFactor));
     }
     return strategy;
   }
   calculatePrices(): number[] {
     // eslint-disable-next-line prettier/prettier
-    console.log(
-      this.p.startDate.toLocaleDateString() +
-        ' ' +
-        this.p.endDate.toLocaleDateString() +
-        ' ' +
-        this.p.basePrice,
-    );
+    console.log(this.p.startDate.toLocaleDateString() + ' ' + this.p.endDate.toLocaleDateString() + ' ' + this.p.basePrice);
     console.log(this.p.strategies);
     const result: number[] = [];
     //for each day from start to end date, calculate the price and return
@@ -63,8 +49,7 @@ export class PricingUtility {
     return result;
   }
   calculateDays(): number {
-    const difference_In_Time =
-      this.p.endDate.getTime() - this.p.startDate.getTime();
+    const difference_In_Time = this.p.endDate.getTime() - this.p.startDate.getTime();
 
     // To calculate the no. of days between two dates
     const days = difference_In_Time / (1000 * 3600 * 24);
