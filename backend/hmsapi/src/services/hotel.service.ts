@@ -28,8 +28,13 @@ export class HotelService {
       return this.prisma.hotel.findMany({
         where,
         include: {
-          hotelRooms:true,
-          location:true
+          location:true,
+          hotelRooms:{
+             include: {
+               room:true
+             } 
+
+          }
         }
     
       });
