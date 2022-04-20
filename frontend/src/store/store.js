@@ -6,7 +6,9 @@ import counterReducer from '../features/counter/counterSlice';
 import loginReducer from '../features/auth/loginSlice';
 import registerReducer from "../features/auth/registerSlice";
 import locationHotelReducer from "../features/locationhotel/locationHotelSlice";
-
+import searchReducer from "../features/search/searchSlice";
+import modalReducer from "../features/modal/modalSlice";
+import bookingReducer from "../features/booking/bookingSlice";
 const persistConfig = {
   key: 'root',
   version: 1,
@@ -14,7 +16,8 @@ const persistConfig = {
 };
 
 const persistedReducer = persistCombineReducers( persistConfig,{
-  login: loginReducer
+  login: loginReducer,
+  booking: bookingReducer
 });
 
 
@@ -22,9 +25,9 @@ const persistedReducer = persistCombineReducers( persistConfig,{
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
     register: registerReducer,
-    locationhotel: locationHotelReducer,
+    search: searchReducer,
+    modal: modalReducer,
     persistedReducer
   },
   middleware: (getDefaultMiddleware) =>

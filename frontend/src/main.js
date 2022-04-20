@@ -2,6 +2,7 @@ import React from "react";
 import { store } from "./store/store";
 import { Provider } from "react-redux";
 import { MantineProvider } from "@mantine/core";
+import { NotificationsProvider } from '@mantine/notifications';
 import { BrowserRouter } from "react-router-dom";
 import Routes from "./routes";
 import { AuthProvider } from "./helpers/hooks/useAuth";
@@ -21,11 +22,13 @@ const Main = () => {
       <PersistGate loading={null} persistor={persistor}>
       <QueryClientProvider client={queryClient}>
         <MantineProvider>
+          <NotificationsProvider>
           <BrowserRouter>
             <AuthProvider>
               <Routes />
             </AuthProvider>
           </BrowserRouter>
+          </NotificationsProvider>
         </MantineProvider>
       </QueryClientProvider>
       </PersistGate>

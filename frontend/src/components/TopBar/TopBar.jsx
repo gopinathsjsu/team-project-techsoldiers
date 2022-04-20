@@ -1,7 +1,7 @@
 import React from 'react';
-import { createStyles, Header, Autocomplete, Group, Burger } from '@mantine/core';
-import { useBooleanToggle } from '@mantine/hooks';
-import { AiOutlineSearch as Search} from 'react-icons/ai';
+import { createStyles, Header, Group, Button, Menu, Text, useMantineTheme, Badge } from '@mantine/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { modalOpen } from '../../features/modal/modalSlice';
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -44,21 +44,11 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function TopBar({ links }) {
-  const [opened, toggleOpened] = useBooleanToggle(false);
+export function TopBar() {
   const { classes } = useStyles();
-
-  const items = links.map((link) => (
-    <a
-      key={link.label}
-      href={link.link}
-      className={classes.link}
-      onClick={(event) => event.preventDefault()}
-    >
-      {link.label}
-    </a>
-  ));
-
+  const dispatch = useDispatch();
+  const theme = useMantineTheme();
+  const bookings = useSelector((state) => state.persistedReducer.booking);
   return (
     <Header height={56} className={classes.header}>
       <div className={classes.inner}>
@@ -68,10 +58,32 @@ export function TopBar({ links }) {
 
         <Group>
           <Group ml={50} spacing={5} className={classes.links}>
-            {items}
+        <Button onClick={() => dispatch(modalOpen())}>Login</Button>
+      <Group position="center">
+      <Menu withArrow size={300} placement="center" transition="pop">
+        {
+        bookings.map((item, key) => (
+            <Menu.Item key={key}>
+          <Group>
+            <div>
+              <Text weight={500}>{item.data.roomType}</Text>
+              <Text size="xs" color="dimmed">
+               No. of Person: {item.data.person}, No. of Room: {item.data.room}
+              </Text>
+              <Text size="xs" color="dimmed">
+               Hotel: { item.data.hotelName }
+              </Text>
+            </div>
+          </Group>
+        </Menu.Item>
+          ))
+        }
+      </Menu>
+    </Group>
           </Group>
         </Group>
       </div>
+      
     </Header>
   );
 }

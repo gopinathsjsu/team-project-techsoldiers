@@ -1,0 +1,1 @@
+export { RoomBooking as default } from './RoomBooking'

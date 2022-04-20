@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react';
 import hotel3 from '../../media/hotel3.jpg';
 import { Link } from "react-router-dom";
 import { createStyles, Paper, Text, CheckboxGroup, Checkbox, Grid } from '@mantine/core';
+import { useQuery } from "react-query";
+import { getAmenityByHotelId } from '../../services/AmenityService';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -27,7 +29,21 @@ const useStyles = createStyles((theme) => ({
 
 export function Amenities(props) {
   const { classes } = useStyles();
-    console.log(props.links);
+
+    const { data, isError, isLoading, isFetching } = useQuery('amenityByHotel',getAmenityByHotelId);
+  console.log(data);
+
+  if(isFetching || isLoading){
+    return(
+      <Grid>
+        <Grid.Col span={6}>
+          <Checkbox
+            label="Amenities"
+          />
+        </Grid.Col>
+      </Grid>
+    );
+  }
 
   return (
     <>
@@ -51,10 +67,11 @@ export function Amenities(props) {
                         <div>
                             <Text><b>Amenities</b></Text>
                             <Grid mt={10}>
-                            <Grid.Col span={6}><Checkbox value="amenities 1" label="Amenities 1" /></Grid.Col>
-                            <Grid.Col span={6}><Checkbox value="amenities 2" label="Amenities 2" /></Grid.Col>
-                            <Grid.Col span={6}><Checkbox value="amenities 3" label="Amenities 3" /></Grid.Col>
-                            <Grid.Col span={6}><Checkbox value="amenities 4" label="Amenities 4" /></Grid.Col>
+                            {
+                              data.data.map((item, key) => (
+                                <Grid.Col span={6}><Checkbox value={item.name} label={item.name} /></Grid.Col>
+                              ))
+                            }
                             </Grid>
                         </div>
                     </Paper>

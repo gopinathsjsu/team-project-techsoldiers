@@ -25,48 +25,16 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export const HotelListing =  (props) => {
-  const [opened, setOpened] = useState(false);
   const { classes } = useStyles();
-  const [hotelId, setHotelId] = useState();
+  const { data, isError, isLoading, isFetching } = useQuery(['hotelByLocation', props.location],() => getHotelsByLocationId(props.location), { suspense: true});
 
-  const [hotelData, setHotelData] = useState(null);
+  data.data.map((item, key) => (
+    setHotelId(item.id)
+  ));
 
-  const links = [
-    {
-      label: "Check-in: 04:00 PM",
-    },
-    {
-      label: "High-Speed Internet Access",
-    },
-    {
-      label: "On-site parking",
-    },
-    {
-      label: "17 meeting rooms",
-    },
-    {
-      label: "41 floors , 762 rooms , 12 suites",
-    },
-    {
-      label: "All public areas non-smoking",
-    },
-    {
-      label: "Air conditioning",
-    },
-    {
-      label: "Coffee maker/tea service",
-    },
-  ];
-
-  const { data, isError, isLoading, isFetching } = useQuery(['hotelByLocation', props.location],() => getHotelsByLocationId(props.location));
-
-  // data.data.map((item, key) => (
-  //   setHotelId(item.id)
-  // ));
-
-  const { data:dataRoomtype, isErrorRoomtype, isLoadingRoomtype, isFetchingRoomtype } = useQuery(['roomTypeByHotel', 1],() => getRoomsByHotel(1));
+  // const { data:dataRoomtype, isErrorRoomtype, isLoadingRoomtype, isFetchingRoomtype } = useQuery(['roomTypeByHotel', 1],() => getRoomsByHotel(1));
  
-  console.log(dataRoomtype);
+  // console.log(dataRoomtype);
   
   
 
@@ -101,7 +69,6 @@ if(isLoading || isFetching){
             </Text>
         </div>
       </Group>
-      <ModalPopup links={links}></ModalPopup>
     </Card>
     </Skeleton>
   );
