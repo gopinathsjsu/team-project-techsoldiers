@@ -8,7 +8,6 @@ export class BookingController {
 
     @Get()
     getAllBookings(): Promise<BookingModel[]> {
-        0
         return this.bookingService.bookings();
     }
 

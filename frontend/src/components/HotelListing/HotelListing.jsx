@@ -60,9 +60,9 @@ export const HotelListing =  (props) => {
 
   const { data, isError, isLoading, isFetching } = useQuery(['hotelByLocation', props.location],() => getHotelsByLocationId(props.location));
 
-  // data.data.map((item, key) => (
-  //   setHotelId(item.id)
-  // ));
+  data.data.map((item, key) => (
+    setHotelId(item.id)
+  ));
 
   const { data:dataRoomtype, isErrorRoomtype, isLoadingRoomtype, isFetchingRoomtype } = useQuery(['roomTypeByHotel', 1],() => getRoomTypeByHotelId(1));
  
