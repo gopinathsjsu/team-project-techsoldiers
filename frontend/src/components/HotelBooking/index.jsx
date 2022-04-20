@@ -1,1 +1,0 @@
-export { HotelBooking as default } from './HotelBooking'

@@ -8,8 +8,7 @@ import hotel1 from '../../media/hotel1.jpg';
 
 export function Listing() {
 
-  const { locationID } = useParams();
-
+  const { locationID} = useParams();
   const links = [
     {
       link: "/",
@@ -28,10 +27,10 @@ export function Listing() {
 if(locationID){
   return (
     <>
-    <TopBar links={links} />
     {/* <SearchComponent></SearchComponent> */}
-    <Box>
+    
       <Image src={hotel1} height={300} width='lg' mb={30} />
+      <Box>
       <Container>
           <HotelListing location={locationID} />  
       </Container>
