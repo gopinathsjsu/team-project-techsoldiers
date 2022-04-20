@@ -12,6 +12,7 @@ const Login = lazy(() => import('../pages/Auth/Login'))
 const Hotel = lazy(() => import('../pages/Hotel'))
 const Listing = lazy(() => import('../pages/Listing'))
 const Room = lazy(() => import('../pages/Booking'))
+const MyBooking = lazy(() => import('../pages/MyBooking'))
 const BookingSummary = lazy(() => import('../pages/BookingSummary'))
 
 /**
@@ -34,6 +35,7 @@ export const Path = () => {
     { path: "/location/:locationID", element: <Listing />},
     { path: "/hotel/:hotelID/rooms", element: <Room />},
     { path: "/summary", element: <BookingSummary />},
+    { path: "/mybooking", element: <MyBooking />},
     { path: "/hotel", element: <Hotel />},
     { path: "*", element: <h1>Not Found!</h1> }
 ]
