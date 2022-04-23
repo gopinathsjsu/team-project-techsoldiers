@@ -19,6 +19,7 @@
     "axios": "^0.26.0",
     "dayjs": "^1.11.0",
     "framer-motion": "^6",
+    "npm-watch": "^0.11.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
@@ -37,7 +38,16 @@
     "build": "dotenv -e .env-production react-scripts build",
     "test": "dotenv -e .env.development.local react-scripts test -- --coverage --coverageDirectory=coverage/jest --watchAll=false",
     "test-dev": "dotenv -e .env.development.local react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev:watch": "npm-watch"
+  },
+  "watch": {
+    "build": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "js,jsx"
+    }
   },
   "eslintConfig": {
     "extends": "react-app"
