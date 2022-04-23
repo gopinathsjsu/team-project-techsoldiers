@@ -1,41 +1,65 @@
-import React from "react";
-import { Box, Container, Grid } from "@mantine/core";
+import React, { Suspense, useEffect, useState } from "react";
+import { Box, Button, Card, Container, Grid } from "@mantine/core";
 import Amenities from "../../components/Amenities";
 import { useSelector } from 'react-redux';
-
-
+import { useLazyQuery } from "react-query";
+import BookingDetails from "../../components/BookingDetails";
+import { getAmenityByHotelId } from '../../services/AmenityService';
+import BookingDetailsRoom from "../../components/BookingDetailsRoom";
+import SummaryBill from "../../components/SummaryBill";
 export function BookingSummary() {
-  const bookings = useSelector(state => state.booking);
 
-  
-  const hotels = [
-    {
-      roomtype: "Royal Suite",
-      roomNum: "2",
-      cost: "290",
-    },
-    {
-      roomtype: "Luxury",
-      roomNum: "1",
-      cost: "390",
-    },
-    {
-      roomtype: "Regular",
-      roomNum: "4",
-      cost: "400",
-    },
-  ];
+  const cartData = useSelector(state => state.persistedReducer.booking);
+  const [amenityData, setAmenityData] = useState([])
+  const bookings = cartData[0].data;
 
+  console.log("bookings  ", bookings);
+  useEffect(() => {
+    async function fetchData() {
+      console.log('calling fetch data ')
+      const response = await getAmenityByHotelId();
+      console.log('response = ', response)
+      if (response.data.length > 0) {
+        console.log(' if response = ', response.data)
 
-  return (
-    <Box>
-      <Container>
-        <Grid mb={30} mt={30}>
-          <Grid.Col span={6}>
-          </Grid.Col>
-        </Grid>
-        <Amenities links={hotels} />
-      </Container>
-    </Box>
-  );
+        setAmenityData(response.data.map((e) => {return {...e, id: '' + e.id}}));
+}
+    }
+fetchData();
+  }, []);
+
+let bookingRooms = [];
+//check if rooms are already configured in state
+//if yes retrieve them
+//else create
+for (let i = 0; i < bookings.room; i++) {
+  bookingRooms.push({
+    roomIndex: i,
+    roomType: bookings.roomType,
+    selectedAmenities: [],
+  });
+}
+console.log(bookingRooms);
+function changeRoomAmenities(roomid, amenities) {
+  console.log(roomid + " ", amenities);
+  bookingRooms[roomid].selectedAmenities=amenities;
+}
+function bookNow(){
+  console.log(bookingRooms);
+}
+/*
+ 
+*/
+return (
+  <>
+    <BookingDetails bookings={bookings} />
+    {bookingRooms.length > 0 && bookingRooms.map((room) => {
+
+      return <BookingDetailsRoom key={room.roomIndex} amenities={amenityData} details={room} changeRoomAmenities={changeRoomAmenities} />
+    })}
+    <SummaryBill  bookings={bookings} rooms={bookingRooms} />
+    <Button onClick={bookNow}>Confirm Booking</Button>
+  </>
+
+);
 }
