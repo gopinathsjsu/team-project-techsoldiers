@@ -6,9 +6,7 @@ import { PricingContext } from './strategy/PricingContext';
 import { SeasonStrategy } from './strategy/SeasonStrategy';
 
 export class PricingUtility {
-  constructor(private p: Pricing) {
-    console.log('Test');
-  }
+  constructor(private p: Pricing) {}
   createStrategy(pType: PricingType): Strategy {
     let strategy: Strategy = null;
     if (pType.strategyType == 1) {
@@ -26,7 +24,7 @@ export class PricingUtility {
     const result: number[] = [];
     //for each day from start to end date, calculate the price and return
     const days = this.calculateDays();
-    let currDate = new Date(this.p.startDate);
+    const currDate = new Date(this.p.startDate);
     const pricingStrategies: PricingContext[] = [];
     for (const strategy of this.p.strategies) {
       pricingStrategies.push(new PricingContext(this.createStrategy(strategy)));
@@ -43,8 +41,6 @@ export class PricingUtility {
       result[i] = Math.max(...prices);
       currDate.setDate(currDate.getDate() + 1);
     }
-    //for each day see if surge applies
-    currDate = new Date(this.p.startDate);
 
     return result;
   }
