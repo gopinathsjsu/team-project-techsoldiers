@@ -26,8 +26,8 @@ const useStyles = createStyles((theme) => ({
 
 export const HotelListing = (props) => {
   const { classes } = useStyles();
-  const { data, isError, isLoading, isFetching } = useQuery(['hotelByLocation', props.location], () => getHotelsByLocationId(props.location), { suspense: true });
-
+  const { data, isError, isLoading, isFetching } = useQuery(['hotelByLocation', props.location],() => getHotelsByLocationId(props.location), { suspense: true});
+  console.log(data);
 
   // const { data:dataRoomtype, isErrorRoomtype, isLoadingRoomtype, isFetchingRoomtype } = useQuery(['roomTypeByHotel', 1],() => getRoomsByHotel(1));
 
@@ -81,17 +81,17 @@ export const HotelListing = (props) => {
               {item.name}
             </Text>
             <Text color="dimmed" weight={700} size="xs" mb="md">
-              Address
+                {item.location.address},{item.location.city},{item.location.country} 
             </Text>
-            <Group noWrap spacing="xs" pb={10}>
-              <Group spacing="xs" noWrap>
-                <Text size="xs">Room Type:</Text><Text size="xs" color="dimmed">Luxury</Text>
+              <Group noWrap spacing="xs" pb={10}>
+                <Group spacing="xs" noWrap>
+                  <Text size="xs">Room Type:</Text><Text size="xs" color="dimmed">{item.hotelRooms[0].room.roomName}</Text>
+                </Group>
+                <Text size="xs" color="dimmed">
+                    |
+                </Text>
+                <Text size="xs">Price:</Text><Text size="xs" color="dimmed">$<span>{item.hotelRooms[0].pricePerRoom}</span>/night</Text>
               </Group>
-              <Text size="xs" color="dimmed">
-                |
-              </Text>
-              <Text size="xs">Price:</Text><Text size="xs" color="dimmed">$<span>45</span>/night</Text>
-            </Group>
             <Text size="sm">
               {item.description}
             </Text>

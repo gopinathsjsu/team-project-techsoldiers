@@ -1,11 +1,14 @@
 import React, { useState, useRef } from 'react';
 import hotel4 from '../../media/hotel4.jpg';
-import { useDispatch } from 'react-redux';
-import ModalPopup from '../../components/ModalPopup'
-import { getMyBookings } from '../../services/BookingService';
-import { useQuery } from "react-query";
-import { createStyles, Card, Image, Group, Text, Checkbox, Center, Button, Skeleton, Grid, Modal, InputWrapper, Input } from '@mantine/core';
-import { getAmenityByHotelId } from '../../services/AmenityService';
+import { getMyBookings, updateMyBooking } from '../../services/BookingService';
+import { useQuery, useMutation } from "react-query";
+import axiosClient from "../../services/axios";
+import { useForm } from '@mantine/form';
+import { DatePicker } from '@mantine/dates';
+import { DateRangePicker } from "@mantine/dates";
+import dayjs from "dayjs";
+import { createStyles, Card, Image, Group, Text, Checkbox, Center, Button, Skeleton, Grid, Modal, InputWrapper, Input, TextInput } from '@mantine/core';
+// import { getAmenityByHotelId } from '../../services/AmenityService';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -40,11 +43,46 @@ const useStyles = createStyles((theme) => ({
 export function MyHotelBooking(props) {
   const { classes } = useStyles();
   const [opened, setOpened] = useState(false);
+  const bookingMutation = useMutation(updateMyBooking);
+
+  // const updateBooking = useMutation(['cancelBooking', id],() => updateMyBooking(id));
+
+
+  let todate = new Date();
+  todate.setDate(todate.getDate() + 7);
+
+  const [date, setDate] = useState({
+    from: new Date(),
+    to: todate,
+  });
+
+  const [dateError, setDateError] = useState(null);
+
+  function changeDate(values) {
+    setDate({ from: values[0], to: values[1] });
+
+    if (values[0] === null && values[1] === null) {
+      setDateError(null);
+    }
+    if (values[0] === null) {
+      setDateError(null);
+    }
+
+    if (
+      values[0] &&
+      values[1] &&
+      dayjs(values[1]).diff(dayjs(values[0]), "day") > 7
+    ) {
+      setDateError("Maximum stay is for 7 days");
+      // Console Logging error for its difference
+      //console.log(dayjs(values[1]).diff(dayjs(values[0]), 'day'));
+    }
+  }
 
   const { data, isError, isLoading, isFetching } = useQuery('mybookings', getMyBookings);
   console.log(data);
 
-  const { data:dataAmenity, isError:isErrorAmenity, isLoading:isLoadingAmenity, isFetching:isFetchingAmenity } = useQuery('amenityByHotel', getAmenityByHotelId);
+  // const { data:dataAmenity, isError:isErrorAmenity, isLoading:isLoadingAmenity, isFetching:isFetchingAmenity } = useQuery('amenityByHotel', getAmenityByHotelId);
 
   if(isLoading || isFetching){
     return (
@@ -74,18 +112,6 @@ export function MyHotelBooking(props) {
     );
   }
 
-  if(isFetchingAmenity || isLoadingAmenity){
-    return(
-      <Grid>
-        <Grid.Col span={6}>
-          <Checkbox
-            label="Amenities"
-          />
-        </Grid.Col>
-      </Grid>
-    );
-  }
-
   return (
     <Grid mb={30} mt={30}>
       {
@@ -102,18 +128,39 @@ export function MyHotelBooking(props) {
                 Hotel Name {item.hotelId}
               </Text>
               <Text size="sm" color="dimmed" lineClamp={4}>
-                Booking Dates: {item.bookingFromDate} - {item.bookingToDate}
+                <b>Booking Dates:</b> {item.bookingFromDate} - {item.bookingToDate}
               </Text>
               <Text size="sm" color="dimmed" lineClamp={4}>
-                Status: {item.status}
+                <b>Status:</b> {item.status}
               </Text>
               <Text size="sm" color="dimmed" lineClamp={4}>
-                Total Cost: {item.totalPrice}
+                <b>Total Cost: $</b> {item.totalPrice}
               </Text>
 
               <Group position="apart" className={classes.footer}>
                 <Center>
-                  <Button onClick={() => setOpened(true)} variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }}>Update Booking</Button>
+                  <Button
+                  onClick={() => setOpened(true)}
+                  variant="gradient"
+                  style={{fontSize: 12, paddingLeft: 12, paddingRight: 12}}
+                  mr={20}
+                  gradient={{ from: 'teal', to: 'blue', deg: 60 }}>
+                    Update Booking
+                  </Button>
+                  <Button 
+                    onClick={() => axiosClient.put('api/booking/' + item.id).then((res) => {
+                    console.log(res);
+                    alert("Booking Cancelled!!");
+                    window.location.reload(false);
+                    }).catch((err) => {
+                      console.log(err);
+                      alert("Booking Cancellation Failed!!");
+                    })} 
+                    variant="gradient" 
+                    style={{fontSize: 12, paddingLeft: 12, paddingRight: 12}} 
+                    gradient={{ from: 'teal', to: 'blue', deg: 60 }}>
+                      Cancel Booking
+                    </Button>
                 </Center>
                 <Modal
                     opened={opened}
@@ -124,44 +171,22 @@ export function MyHotelBooking(props) {
                     transitionDuration={600}
                     transitionTimingFunction="ease"
                 >
-                  <Text size="sm" mb={20}>
+                  <form>
                     <Grid>
-                      <Grid.Col span={6}>
-                        <InputWrapper label="Booking From">
-                          <Input 
-                            variant="default"
-                            label="Booking From"
-                            value={item.bookingFromDate}
-                            placeholder="From Date" />
-                        </InputWrapper>
-                      </Grid.Col>
-                      <Grid.Col span={6}>
-                        <InputWrapper label="Booking To">
-                          <Input 
-                            variant="default"
-                            label="Booking To"
-                            value={item.bookingToDate}
-                            placeholder="To Date" />
-                        </InputWrapper>
+                      <Grid.Col span={8}>
+                        <DateRangePicker
+                          label="Book your Stay"
+                          placeholder="Pick dates range"
+                          value={[item.bookingFromDate, item.bookingToDate]}
+                          onChange={(e) => changeDate(e)}
+                          minDate={dayjs(new Date()).toDate()}
+                          error={dateError}
+                          required
+                        />
                       </Grid.Col>
                     </Grid>
-                  </Text>
-                  <Text size='md' borderBottom='1px solid rgb(233, 236, 239)' mb={5}>
-                      Amenities
-                  </Text>
-                  <Grid mb={30}>
-                    {
-                      dataAmenity.data.map((item, key) => (
-                        <Grid.Col span={6}>
-                          <Checkbox
-                            label={item.name}
-                            value={item.name}
-                          />
-                        </Grid.Col>
-                      ))
-                    }
-                  </Grid>
-                  <Button variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }}>Update</Button>
+                    <Button type='submit' variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }}>Update</Button>
+                  </form>
                 </Modal>
               </Group>
             </Card>  
