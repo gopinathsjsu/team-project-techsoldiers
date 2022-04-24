@@ -19,4 +19,16 @@ export class CustomerService {
       }
     });
   }
+
+  async myBookings(
+    customerWhereUniqueInput: Prisma.CustomerWhereUniqueInput,
+  ): Promise<Customer | null> {
+    return this.prisma.customer.findUnique({
+      where: customerWhereUniqueInput,
+      include: { 
+        bookings:true
+        
+      }
+    });
+  }
 }
