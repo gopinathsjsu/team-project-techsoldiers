@@ -33,6 +33,9 @@ export class BookingService {
   async createBooking(data: Prisma.BookingCreateInput): Promise<Booking> {
     return this.prisma.booking.create({
       data,
+      include:{
+        bookingRoomAmenities: true
+      }
     });
   }
 

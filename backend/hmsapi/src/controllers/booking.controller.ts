@@ -1,7 +1,9 @@
-import { Controller, Get, Param, Body, Post, Put } from '@nestjs/common';
+import { Controller, Get, Param, Body, Post, Put, Req, Request, UseGuards } from '@nestjs/common';
 import { BookingService } from 'src/services/booking.service';
 import { Booking as BookingModel } from '.prisma/client';
 import { BookingRequest } from 'src/models/BookingRequest';
+import { ChangeBookingRequest } from 'src/models/ChangeBookingRequest';
+import { AuthGuard } from '@nestjs/passport';
 @Controller('booking')
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
@@ -26,10 +28,15 @@ export class BookingController {
   }
 
   @Post()
-  async createBooking(
+  @UseGuards(AuthGuard('jwt'))
+  async createBooking( @Req() req : any,
     @Body() bookingData: BookingRequest,
   ): Promise<BookingModel> {
-    const { bookingToDate, bookingFromDate, customerId, totalPrice, hotelId, status } = bookingData;
+    const { bookingToDate, bookingFromDate,  hotelId, roomId,  } = bookingData;
+
+    console.log(req.user.email);
+    const totalPrice = 2000;
+    const status = "Booked";
     return await this.bookingService.createBooking({
       bookingToDate,
       bookingFromDate,
@@ -39,8 +46,8 @@ export class BookingController {
         connect: { id: Number(hotelId) },
       },
       customer: {
-        connect: { customerId: Number(customerId) },
-      },
+        connect: { customerId: Number(1) },
+      }
     });
   }
 
@@ -51,4 +58,35 @@ export class BookingController {
       data: { status: 'Cancel' },
     });
   }
+
+  @Put('/update/:id')
+  @UseGuards(AuthGuard('jwt'))
+  async changeBooking( @Req() req : any,@Param('id') id: string,
+    @Body() changeBookingData: ChangeBookingRequest,
+  ): Promise<BookingModel> {
+
+    console.log(req.user.email);
+
+    const { bookingToDate, bookingFromDate , customerId,hotelId } = changeBookingData;
+   console.log(changeBookingData);
+   const totalPrice = 2000;
+    
+   const booking = await this.bookingService.bookingById({ id: Number(id) });
+   const bookingHistory =  JSON.stringify({"startDate": booking.bookingFromDate , "toDate" : booking.bookingToDate});
+
+   console.log(bookingHistory);
+   return await this.bookingService.updateBooking({
+      where: { id: Number(id) },
+      data: { 
+        status: 'ChangedBooking',
+     bookingHistory: bookingHistory,
+    bookingFromDate :bookingFromDate,
+     bookingToDate: bookingToDate ,
+    totalPrice: totalPrice,
+  
+  },
+     });
+
+  }
+
 }
