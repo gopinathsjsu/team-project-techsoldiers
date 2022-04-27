@@ -97,6 +97,7 @@ model Booking {
   totalPrice           Decimal
   hotelId Int
   hotel Hotel  @relation(fields: [hotelId], references: [id])
+  bookingHistory    String @default("")
 
 }
 
