@@ -7,8 +7,10 @@ export const bookingSlice = createSlice({
     initialState,
     reducers: {
       // can add more reducers
-      bookingStatus: (state, action) => {  
-        state.push(action.payload)
+      bookingStatus: (state, action) => {
+        // state = [];  
+        // state.push(action.payload)
+        state.unshift(action.payload);
       }
     },
   })

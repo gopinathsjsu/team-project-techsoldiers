@@ -52,13 +52,20 @@ function bookNow(){
 */
 return (
   <>
-    <BookingDetails bookings={bookings} />
-    {bookingRooms.length > 0 && bookingRooms.map((room) => {
+    <Container>
+      <BookingDetails bookings={bookings} />
+      <Grid mb={20}>
+      {bookingRooms.length > 0 && bookingRooms.map((room) => {
+          return <Grid.Col span={6}><BookingDetailsRoom key={room.roomIndex} amenities={amenityData} details={room} changeRoomAmenities={changeRoomAmenities} /></Grid.Col>
+      })}
+      </Grid>
+      {/* {bookingRooms.length > 0 && bookingRooms.map((room) => {
 
-      return <BookingDetailsRoom key={room.roomIndex} amenities={amenityData} details={room} changeRoomAmenities={changeRoomAmenities} />
-    })}
-    <SummaryBill  bookings={bookings} rooms={bookingRooms} />
-    <Button onClick={bookNow}>Confirm Booking</Button>
+        return <BookingDetailsRoom key={room.roomIndex} amenities={amenityData} details={room} changeRoomAmenities={changeRoomAmenities} />
+      })} */}
+      <SummaryBill  bookings={bookings} rooms={bookingRooms} />
+      <Button mt={30} onClick={bookNow}>Confirm Booking</Button>
+    </Container>
   </>
 
 );
