@@ -27,6 +27,7 @@ import { PricingController } from './controllers/pricing.controller';
 import { PricingService } from './services/pricing.service';
 import { HotelRoomService } from './services/hotelroom.service';
 import { UserService } from './services/user.service';
+import { BookingRoomAmenitiesService } from './services/bookingroomamenities.service';
 /* eslint-disable */
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { UserService } from './services/user.service';
     PricingService,
     AppService,
     UserService,
+    BookingRoomAmenitiesService,
   ],
 })
 export class AppModule {}

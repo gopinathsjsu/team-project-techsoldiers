@@ -23,4 +23,18 @@ export class RoomService {
         });
       }
 
+
+      async hotelRoomByHotelIdAndRoomId(params: {
+        where?: Prisma.HotelRoomWhereInput;
+        }): Promise<Number> {
+          const { where } = params;
+          const hotelRoom =  await this.prisma.hotelRoom.findMany({
+            where,
+          });
+
+          console.log(hotelRoom);
+          return hotelRoom[0].id;
+
+        }
+  
 }
