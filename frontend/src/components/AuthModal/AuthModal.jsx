@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginState } from "../../features/auth/loginSlice";
 import { registerState, confirmState } from "../../features/auth/registerSlice";
 import { modalClose } from "../../features/modal/modalSlice";
+import { showNotification } from "@mantine/notifications";
 
 export function AuthModal() {
   const loginMutation = useMutation(login);
@@ -59,7 +60,18 @@ export function AuthModal() {
           refreshToken: res.data.refreshToken.token,
           accessToken: res.data.accessToken.jwtToken,
         };
+
+        showNotification({
+          title: "Success",
+          message: "You have successfully logged!"
+        })
+
         dispatch(loginState(data));
+      }).catch((err) => {
+          form.setValues({
+            email: email
+          })
+          toggle("confirm");
       });
   }
 
@@ -85,6 +97,10 @@ export function AuthModal() {
     }).then((res) => {
         console.log(res);
         confirmState();
+        showNotification({
+          title: "Registered!",
+          message:"You have successfully added your account!",
+        })
         dispatch(modalClose());
     }).catch((err) => console.log(err))
   }

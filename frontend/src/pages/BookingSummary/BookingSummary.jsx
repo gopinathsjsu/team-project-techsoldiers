@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 
 export function BookingSummary() {
-  const bookings = useSelector(state => state.booking);
+  const auth = useSelector(state => state.login);
 
   
   const hotels = [
