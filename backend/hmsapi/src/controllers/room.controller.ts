@@ -32,11 +32,7 @@ export class RoomController {
   }
 
   @Get('/hotel/:hotelId/rooms?')
-  async getRoomByFilters(
-    @Param('hotelId') hotelId: string,
-    @Query('startDate') startDate: string,
-    @Query('endDate') endDate: string,
-  ): Promise<HotelRoomDetails[]> {
+  async getRoomByFilters(@Param('hotelId') hotelId: string, @Query('startDate') startDate: string, @Query('endDate') endDate: string): Promise<HotelRoomDetails[]> {
     const result: HotelRoomDetails[] = [];
     try {
       console.log(hotelId, startDate, endDate);

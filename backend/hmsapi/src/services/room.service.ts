@@ -10,7 +10,7 @@ export class RoomService {
     return this.prisma.room.findMany({});
   }
 
-  async roomsByHotelId(params: { where?: Prisma.HotelRoomWhereInput }): Promise<HotelRoom[]> {
+  async roomsByHotelId(params: { where?: Prisma.HotelRoomWhereInput }): Promise<HotelRoomDTO[]> {
     const { where } = params;
     return this.prisma.hotelRoom.findMany({
       where,
