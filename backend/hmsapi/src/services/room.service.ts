@@ -1,6 +1,7 @@
 import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
-import { Room,HotelRoom, Prisma, Location } from '.prisma/client';
+import { Room, HotelRoom, Prisma, Location } from '.prisma/client';
 import { PrismaService } from './prisma.service';
+import { HotelRoomDTO } from 'src/models/HotelRoomDetails';
 
 @Injectable()
 export class RoomService {
@@ -9,18 +10,13 @@ export class RoomService {
     return this.prisma.room.findMany({});
   }
 
-  
-    async roomsByHotelId(params: {
-      where?: Prisma.HotelRoomWhereInput;
-      }): Promise<HotelRoom[]> {
-        const { where } = params;
-        return this.prisma.hotelRoom.findMany({
-          where,
-          include: {
-            room :true
-          }
-      
-        });
-      }
-
+  async roomsByHotelId(params: { where?: Prisma.HotelRoomWhereInput }): Promise<HotelRoomDTO[]> {
+    const { where } = params;
+    return this.prisma.hotelRoom.findMany({
+      where,
+      include: {
+        room: true,
+      },
+    });
+  }
 }

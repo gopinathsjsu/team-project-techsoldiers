@@ -27,6 +27,7 @@ import { PricingController } from './controllers/pricing.controller';
 import { PricingService } from './services/pricing.service';
 import { HotelRoomService } from './services/hotelroom.service';
 import { UserService } from './services/user.service';
+import { RoomAvailabilityService } from './services/roomavailability.service';
 /* eslint-disable */
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { UserService } from './services/user.service';
     AuthConfig,
     JwtStrategy,
     AuthService,
+    RoomAvailabilityService,
     BookingService,
     HotelService,
     HotelRoomService,
