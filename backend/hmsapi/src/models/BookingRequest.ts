@@ -2,7 +2,7 @@ import { Amenities } from "@prisma/client";
 
 export interface RoomAmenitiesRequest {
 
-    index : number;
+    roomId : number;
     amenities : number[];
 
 }
@@ -12,7 +12,7 @@ export interface BookingRequest {
      bookingFromDate : Date; 
      hotelId: Number ;
      roomId : number;
-     amenities : RoomAmenitiesRequest[]
+     amenities : RoomAmenitiesRequest[];
 
     }
-  
+    
