@@ -29,4 +29,13 @@ export class RoomService {
     console.log(hotelRoom);
     return hotelRoom[0].id;
   }
+  async getHotelRoombyHotelIdandRoomId(params: { where?: Prisma.HotelRoomWhereInput }): Promise<HotelRoomDTO> {
+    const { where } = params;
+    return await this.prisma.hotelRoom.findFirst({
+      where,
+      include: {
+        room: true,
+      },
+    });
+  }
 }
