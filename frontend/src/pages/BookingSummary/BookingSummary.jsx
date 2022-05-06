@@ -27,6 +27,7 @@ export function BookingSummary() {
     }
 fetchData();
   }, []);
+  const auth = useSelector(state => state.login);
 
 let bookingRooms = [];
 //check if rooms are already configured in state

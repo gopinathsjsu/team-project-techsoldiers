@@ -10,4 +10,10 @@ export function updateMyBooking(){
 
 export function cancelMyBooking(id){
     return axiosClient.put('api/booking' + id);
+    
+}
+
+export function createBookings(){
+
+    return axiosClient.post('api/booking')
 }

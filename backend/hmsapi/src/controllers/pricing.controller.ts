@@ -1,17 +1,12 @@
 import { Controller, Get, HttpException, HttpStatus, Param, Query } from '@nestjs/common';
-import { HotelRoom, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { PricingUtility } from 'src/helpers/pricingutility';
 import { PricingAPIInput } from 'src/models/PricingAPIInput';
 import { Pricing } from 'src/models/Pricing';
 import { PricingResponse } from 'src/models/PricingResponse';
 import { PricingService } from 'src/services/pricing.service';
 import { HotelRoomService } from 'src/services/hotelroom.service';
-import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
-import { APIPricingType } from 'src/models/APIPricingType';
-import { catchError } from 'rxjs';
-const userPosts: Prisma.PricingTypeInclude = {
-  hotelRoom: true,
-};
+
 @Controller('pricing')
 export class PricingController {
   constructor(private readonly pricingService: PricingService, private readonly hotelRoomService: HotelRoomService) {}
@@ -28,25 +23,34 @@ export class PricingController {
     const endDate: Date = new Date(input.endDate);
     const noOfDays = this.calculateDays(startDate, endDate);
     console.log(pricings);
-    if (pricings.length > 0) return this.processRoom(Number(roomId), pricings[0].hotelRoom.pricePerRoom, startDate, endDate, pricings);
-    else {
-      if (room) {
+    if (room) {
+      const roomCapacityRequest = input.noOfPersons;
+      if (pricings.length > 0) {
+        return this.processRoom(Number(roomId), room.pricePerRoom, startDate, endDate, pricings, roomCapacityRequest);
+      } else {
         const resp: PricingResponse = {
           roomId: Number(roomId),
           prices: [],
           startDate: startDate,
           endDate: endDate,
-          finalPrice: Number(room.pricePerRoom) * noOfDays,
+          finalSurgePrice: Number(room.pricePerRoom) * noOfDays,
+          basePrice: Number(room.pricePerRoom),
+          finalCartPrice: Number(room.pricePerRoom) * noOfDays,
         };
+        if (resp.prices.length == 0) {
+          for (let j = 0; j < noOfDays; j++) {
+            resp.prices.push(resp.basePrice);
+          }
+        }
         return resp;
-      } else {
-        throw new HttpException(
-          {
-            status: 'Invalid input',
-          },
-          HttpStatus.NOT_FOUND,
-        );
       }
+    } else {
+      throw new HttpException(
+        {
+          status: 'Invalid input',
+        },
+        HttpStatus.NOT_FOUND,
+      );
     }
   }
   /*
@@ -95,17 +99,25 @@ export class PricingController {
       //for each room calculate pricing
       for (let i = 0; i < rooms.length; i++) {
         const room = rooms[i];
+        const roomCapacityRequest = input.noOfPersons;
         let resp: PricingResponse = {
           roomId: Number(room.roomId),
           prices: [],
           startDate: startDate,
           endDate: endDate,
-          finalPrice: Number(room.pricePerRoom) * noOfDays,
+          finalSurgePrice: Number(room.pricePerRoom) * noOfDays,
+          basePrice: Number(room.pricePerRoom),
+          finalCartPrice: Number(room.pricePerRoom) * noOfDays,
         };
         if (prices.hasOwnProperty('' + room.roomId)) {
           if (prices[room.roomId + ''].length > 0) {
             //if zero create single object
-            resp = this.processRoom(room.roomId, prices[room.roomId + ''][0].hotelRoom.pricePerRoom, startDate, endDate, prices[room.roomId + '']);
+            resp = this.processRoom(room.roomId, prices[room.roomId + ''][0].hotelRoom.pricePerRoom, startDate, endDate, prices[room.roomId + ''], roomCapacityRequest);
+          }
+        }
+        if (resp.prices.length == 0) {
+          for (let j = 0; j < noOfDays; j++) {
+            resp.prices.push(resp.basePrice);
           }
         }
         response.push(resp);
@@ -121,7 +133,7 @@ export class PricingController {
     }
   }
 
-  processRoom(roomId, basePrice, startDate, endDate, strategies): PricingResponse {
+  processRoom(roomId, basePrice, startDate, endDate, strategies, noOfPersons): PricingResponse {
     const pricing: Pricing = {
       basePrice: basePrice,
       startDate: startDate,
@@ -141,10 +153,16 @@ export class PricingController {
       prices: dayPrices,
       startDate: startDate,
       endDate: endDate,
-      finalPrice: finalPrice,
+      finalSurgePrice: finalPrice,
+      basePrice: basePrice,
+      finalCartPrice: finalPrice,
     };
-    //calculat final price
-
+    const noOfDays = this.calculateDays(startDate, endDate);
+    if (resp.prices.length == 0) {
+      for (let j = 0; j < noOfDays; j++) {
+        resp.prices.push(resp.basePrice);
+      }
+    }
     return resp;
   }
   calculateDays(startDate: Date, endDate: Date): number {

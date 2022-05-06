@@ -25,6 +25,7 @@ export class AuthService {
       Pool: this.userPool,
     };
 
+    
     const cognitoUser = new CognitoUser(userData);
 
     return new Promise((resolve, reject) => {
@@ -101,9 +102,19 @@ export class AuthService {
           resolve(result);
         },
         onFailure: (err) => {
-          console.log(err);
-          reject(err);
-        },
+          if(err.code === "UserNotConfirmedException"){
+            newUser.getAttributeVerificationCode(email, {
+              onSuccess: function (success: string): void {
+                resolve(success);
+              },
+              onFailure: function (err: Error): void {
+                reject(err);
+              }
+        })
+          }else{ reject(err) }
+  
+        }
+        ,
         newPasswordRequired: (userAttributes, requiredAttributes) => {
           newUser.completeNewPasswordChallenge(
             'Admin@1234@raj',

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Select,
   Grid,
@@ -67,6 +67,7 @@ export function Search({ componentName }) {
   // When the Date changes please do check that it is valid date according to our logic
   function changeDate(values) {
     setDate({ from: values[0], to: values[1] });
+    dispatch(searchState({date: { from: values[0], to: values[1] }}))
 
     if (values[0] === null && values[1] === null) {
       setDateError(null);
@@ -106,13 +107,14 @@ export function Search({ componentName }) {
 
   }
 
+
   return (
     <Container size="xl">
       <Grid>
         { componentName === "Booking" ? <></> : 
         <Grid.Col span={3}>
           <Select
-            value={searchData != null ? searchData.location : location}
+            value={location}
             onChange={setLocation}
             data={data}
             label="Select Location"
