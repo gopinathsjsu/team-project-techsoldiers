@@ -79,4 +79,30 @@ export class UserService {
     console.log(user);
     return user[0];
   }
+
+  async fetchUserRole(params: {
+    where?: Prisma.UserWhereInput;
+    }): Promise<String> {
+        const { where } = params;
+    const user = await this.prisma.user.findMany({
+        where,
+        include:{
+          customer:true,
+          employee:true
+        }
+    });
+
+    console.log(user[0]);
+
+
+    if(user[0].customer == null && user[0].employee == null){
+      return "No Roles Assigned";
+    }else if(user[0].customer == null){
+      return "Admin";
+    }else {
+      return "User";
+    }
+
+  }
+
 }
