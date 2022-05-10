@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Body, Post, Put, Req, Request, UseGuards, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Param, Body, Post, Put, Req, Request, UseGuards, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
 import { BookingService } from 'src/services/booking.service';
 import { Booking as BookingModel } from '.prisma/client';
 import { BookingRequest, RoomAmenitiesRequest } from 'src/models/BookingRequest';
@@ -41,8 +41,9 @@ export class BookingController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
-  async createBooking(@Req() req: any, @Body() bookingData: BookingRequest): Promise<BookingModel> {
-    let { bookingToDate, bookingFromDate, hotelId, roomId, noOfRooms, amenities } = bookingData;
+  async createBooking(@Req() req: any, @Body() bookingData: BookingRequest): Promise<BookingModel | any> {
+    const { hotelId, roomId, noOfRooms, amenities } = bookingData;
+    let { bookingToDate, bookingFromDate } = bookingData;
     console.log(req.user.email);
 
     // fetching customerID based on email
@@ -61,13 +62,17 @@ export class BookingController {
       },
     });
 
-     bookingFromDate = new Date(bookingFromDate);
-     bookingToDate = new Date(bookingToDate);
-    
+    if (!currRoom) {
+      throw new BadRequestException({ msg: 'No Such Room' });
+    }
+    bookingFromDate = new Date(bookingFromDate);
+    bookingToDate = new Date(bookingToDate);
+
     console.log(bookingFromDate.getTime());
     const roomscount = await this.roomAvailabilityService.fetchRoomAvailability(Number(hotelId), roomId, bookingFromDate, bookingToDate, currRoom.numberOfRooms);
     if (noOfRooms > roomscount) {
       //throw error
+      throw new BadRequestException({ msg: 'Rooms not Available' });
     } else {
       //add them
       //create booking
@@ -130,7 +135,7 @@ export class BookingController {
 
   @Put('/:id')
   @UseGuards(AuthGuard('jwt'))
-  async cancelBooking(@Req() req: any,@Param('id') id: string): Promise<BookingModel> {
+  async cancelBooking(@Req() req: any, @Param('id') id: string): Promise<BookingModel> {
     return this.bookingService.updateBooking({
       where: { id: Number(id) },
       data: { status: 'Cancel' },
@@ -142,12 +147,40 @@ export class BookingController {
   async changeBooking(@Req() req: any, @Param('id') id: string, @Body() changeBookingData: ChangeBookingRequest): Promise<BookingModel> {
     console.log(req.user.email);
 
-    const { bookingToDate, bookingFromDate, customerId, hotelId } = changeBookingData;
+    const { customerId, hotelId } = changeBookingData;
+    let { bookingToDate, bookingFromDate } = changeBookingData;
+    bookingFromDate = new Date(bookingFromDate);
+    bookingToDate = new Date(bookingToDate);
     console.log(changeBookingData);
-    const totalPrice = 2000;
+
+    let totalPrice = 2000;
 
     const booking = await this.bookingService.bookingById({ id: Number(id) });
+    console.log(booking);
+    const currRoom = await this.bookingService.getRoomByBookingId(booking.id);
+    if (!currRoom) {
+      throw new BadRequestException({ msg: 'Invalid Room' });
+    }
+    const roomscount = await this.roomAvailabilityService.fetchRoomAvailability(Number(hotelId), currRoom.roomId, bookingFromDate, bookingToDate, currRoom.numberOfRooms);
+    if (roomscount < booking.bookingRoomAmenities.length) {
+      throw new BadRequestException({ msg: 'Rooms not Available' });
+    }
     const bookingHistory = JSON.stringify({ startDate: booking.bookingFromDate, toDate: booking.bookingToDate });
+    const pricePerRoom = await this.calculatePrice(Number(hotelId), currRoom.roomId, bookingFromDate, bookingToDate);
+    console.log(pricePerRoom);
+    totalPrice = pricePerRoom * booking.bookingRoomAmenities.length;
+    console.log(totalPrice);
+    const roomAmenities: RoomAmenitiesRequest[] = [];
+    for (const am of booking.bookingRoomAmenities) {
+      const reqs = am.amenities.split(',').map((e) => parseInt(e));
+      roomAmenities.push({
+        roomId: am.hotelRoomId,
+        amenities: reqs,
+      });
+    }
+    const amenitiesPrice = await this.calculateAmenities(roomAmenities);
+    totalPrice += amenitiesPrice;
+    console.log(totalPrice);
 
     console.log(bookingHistory);
     return await this.bookingService.updateBooking({
