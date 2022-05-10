@@ -3,14 +3,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { User, Prisma, Customer } from '.prisma/client';
 import { PrismaService } from './prisma.service';
 import { UserService } from './user.service';
-import {
-  AuthenticationDetails,
-  CognitoUser,
-  CognitoUserPool,
-  CognitoUserAttribute,
-} from 'amazon-cognito-identity-js';
+import { AuthenticationDetails, CognitoUser, CognitoUserPool, CognitoUserAttribute } from 'amazon-cognito-identity-js';
 import { CustomerService } from './customer.service';
-
 
 @Injectable()
 export class AuthService {
@@ -22,7 +16,7 @@ export class AuthService {
     });
   }
 
-  confirmRegistration(confirmUser: { code: string; email: string }) {
+  async confirmRegistration(confirmUser: { code: string; email: string }) {
     const { code, email } = confirmUser;
 
     const userData = {
@@ -30,11 +24,10 @@ export class AuthService {
       Pool: this.userPool,
     };
 
-
     const cognitoUser = new CognitoUser(userData);
-
+    const context=this;
     return new Promise((resolve, reject) => {
-      cognitoUser.confirmRegistration(code, true, function (err, result) {
+      cognitoUser.confirmRegistration(code, true, async function (err, result) {
         if (err) {
           reject(err);
         } else {
@@ -42,18 +35,18 @@ export class AuthService {
             const data = { status: 'success' };
 
             try {
-
               // fetch the user details in db
-              const user = this.userService.userByEmail({
+
+              const user = await context.userService.userByEmail({
                 where: {
-                  email: email
-                }
+                  email: email,
+                },
               });
 
               console.log(user);
 
               // saving the customer details in db
-              const customer = this.custService.createCustomer({
+              const customer = await context.custService.createCustomer({
                 rewards: 100,
                 user: {
                   connect: { id: Number(user.id) },
@@ -61,10 +54,9 @@ export class AuthService {
               });
 
               console.log(customer);
-
-            } catch {
-
-              console.log("Error while adding customer details");
+            } catch (err) {
+              console.log(err);
+              console.log('Error while adding customer details');
             }
 
             resolve(data);
@@ -74,16 +66,9 @@ export class AuthService {
     });
   }
 
-  registerUser(newUser: {
-    email: string;
-    password: string;
-    name: string;
-  }) {
-    const { email, password, name } =
-      newUser;
+  registerUser(newUser: { email: string; password: string; name: string }) {
+    const { email, password, name } = newUser;
     const data = {};
-
-
 
     return new Promise((resolve, reject) => {
       this.userPool.signUp(
@@ -103,7 +88,6 @@ export class AuthService {
             reject(error);
           } else {
             const data = {
-
               username: result.user.getUsername(),
               userConfirmation: result.userConfirmed,
               status: 'success',
@@ -113,11 +97,10 @@ export class AuthService {
             const user = this.userService.createUser({
               email,
               name,
-              phone: '6693020897'
+              phone: '6693020897',
             });
 
             resolve(data);
-
           }
         },
       );
@@ -141,37 +124,33 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       newUser.authenticateUser(authenticationDetails, {
         onSuccess: (result) => {
-          // Tried destructing the data but was not needed for this api. 
+          // Tried destructing the data but was not needed for this api.
           //const data = { token: { jwtToken: result.getIdToken().getJwtToken(), refreshToken: result.getRefreshToken().getToken(), accessToken: result.getAccessToken().getJwtToken() } }
           resolve(result);
         },
         onFailure: (err) => {
-          if (err.code === "UserNotConfirmedException") {
+          if (err.code === 'UserNotConfirmedException') {
             newUser.getAttributeVerificationCode(email, {
               onSuccess: function (success: string): void {
                 resolve(success);
               },
               onFailure: function (err: Error): void {
                 reject(err);
-              }
-            })
-          } else { reject(err) }
-
-        }
-        ,
+              },
+            });
+          } else {
+            reject(err);
+          }
+        },
         newPasswordRequired: (userAttributes, requiredAttributes) => {
-          newUser.completeNewPasswordChallenge(
-            'Admin@1234@raj',
-            requiredAttributes,
-            {
-              onSuccess: (result) => {
-                resolve(result);
-              },
-              onFailure: (err) => {
-                reject(err);
-              },
+          newUser.completeNewPasswordChallenge('Admin@1234@raj', requiredAttributes, {
+            onSuccess: (result) => {
+              resolve(result);
             },
-          );
+            onFailure: (err) => {
+              reject(err);
+            },
+          });
         },
       });
     });
