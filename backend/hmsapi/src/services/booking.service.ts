@@ -61,6 +61,9 @@ export class BookingService {
     return this.prisma.booking.update({
       data,
       where,
+      include:{
+        bookingRoomAmenities : true,
+      }
     });
   }
   async getRoomByBookingId(bookingId: number): Promise<HotelRoomDTO> {

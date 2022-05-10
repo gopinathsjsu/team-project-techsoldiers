@@ -38,4 +38,12 @@ export class CustomerService {
     });
 }
 
+async updateRewards(params: { where: Prisma.CustomerWhereUniqueInput; data: Prisma.CustomerUpdateInput }): Promise<Customer> {
+  const { where, data } = params;
+  return this.prisma.customer.update({
+    data,
+    where,
+  });
+}
+
 }

@@ -9,6 +9,8 @@ import { BookingRoomAmenitiesService } from 'src/services/bookingroomamenities.s
 import { RoomService } from 'src/services/room.service';
 import { RoomAvailabilityService } from 'src/services/roomavailability.service';
 import { AmenitiesService } from 'src/services/amenities.service';
+import { CustomerService } from 'src/services/customer.service';
+import { Decimal } from '@prisma/client/runtime';
 @Controller('booking')
 export class BookingController {
   constructor(
@@ -18,7 +20,8 @@ export class BookingController {
     private readonly roomService: RoomService,
     private readonly roomAvailabilityService: RoomAvailabilityService,
     private readonly amenitiesService: AmenitiesService,
-  ) {}
+    private readonly custService: CustomerService,
+  ) { }
 
   @Get()
   getAllBookings(): Promise<BookingModel[]> {
@@ -100,6 +103,26 @@ export class BookingController {
 
       const bookingId = booking.id;
       console.log(bookingId);
+
+      //update rewards for customer 
+      try {
+
+        const cust = await this.custService.customerById({customerId: Number(custId) });
+
+        console.log("Customer reward : " + cust.rewards);
+
+        const reward = new Decimal(cust.rewards).add(100);
+        const customer = await this.custService.updateRewards({
+          where: { customerId: Number(custId) },
+          data: { rewards:reward },
+        });
+
+        console.log(customer);
+      } catch (err) {
+
+        console.log ("Eror while updating rewards");
+      }
+
 
       //fetching hotelRoomId based on hotel
 
