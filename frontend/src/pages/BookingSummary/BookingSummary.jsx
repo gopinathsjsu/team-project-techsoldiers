@@ -37,53 +37,64 @@ export function BookingSummary() {
     fetchData();
   }, []);
 
-  let bookingRooms = [];
-  //check if rooms are already configured in state
-  //if yes retrieve them
-  //else create
-  for (let i = 0; i < bookings.room; i++) {
-    bookingRooms.push({
-      roomId: i,
-      selectedAmenities: [],
+let bookingRooms = [];
+//check if rooms are already configured in state
+//if yes retrieve them
+//else create
+for (let i = 0; i < bookings.room; i++) {
+  bookingRooms.push({
+    roomId: i,
+    selectedAmenities: [],
+  });
+}
+console.log(bookingRooms);
+let [amprice, setAmprice] = useState(0);
+function changeRoomAmenities(roomid, amenities) {
+  console.log(roomid + " ", amenities);
+  bookingRooms[roomid].selectedAmenities=amenities;
+  calculateAmenities(bookingRooms);
+}
+function calculateAmenities(bookingRooms) {
+  for (let bookingRoom of bookingRooms) {
+    let amen = amenityData.filter(e => bookingRoom.selectedAmenities.indexOf(e.id));
+    let prices = 0;
+    amen.forEach(e => {
+      prices += parseInt(e.price);
     });
+    setAmprice(amprice + prices);
   }
-  console.log(bookingRooms);
-  function changeRoomAmenities(roomid, amenities) {
-    console.log(roomid + " ", amenities);
-    bookingRooms[roomid].selectedAmenities = amenities;
-  }
-  function bookNow() {
-
-    if (login.status == "unauth") {
+function bookNow(){
+  
+  if(login.status == "unauth"){
+    showNotification({
+      title: "Please Auth",
+      message: 'Please login to create booking!',
+      color: 'red',
+    });
+  } else {
+    let amens = bookingRooms.map(e => {
+      return { roomId: e.roomId, amenities: e.selectedAmenities.map(t => parseInt(t)) };
+    });
+    createBookingMutation.mutateAsync({
+      data: {
+        "bookingToDate":bookings.date.to,
+	      "bookingFromDate":bookings.date.from,
+	      "roomId":parseInt(bookings.roomID),
+	      "hotelId" : parseInt(bookings.hotelID),
+	      "amenities" :   bookingRooms,
+	      "noOfRooms" : parseInt(bookings.room)
+      },
+      token: login.data.jwt.token
+    }).then((res) => {
       showNotification({
-        title: "Please Auth",
-        message: 'Please login to create booking!',
-        color: 'red',
-      });
-    } else {
-      let amens = bookingRooms.map(e => {
-        return { roomId: e.roomId, amenities: e.selectedAmenities.map(t => parseInt(t)) };
-      });
-      createBookingMutation.mutateAsync({
-        data: {
-          "bookingToDate": bookings.date.to,
-          "bookingFromDate": bookings.date.from,
-          "roomId": parseInt(bookings.roomID),
-          "hotelId": parseInt(bookings.hotelID),
-          "amenities": amens,
-          "noOfRooms": parseInt(bookings.room)
-        },
-        token: login.data.jwt.token
-      }).then((res) => {
-        showNotification({
-          title: "Success",
-          message: 'Your Booking is created Successfully',
-          color: "green"
-        })
+        title: "Success",
+      message: 'Your Booking is created Successfully',
+      color: "green"
       })
-    }
-
+    })
   }
+
+}
 
   /*
    
