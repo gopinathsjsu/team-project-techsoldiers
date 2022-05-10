@@ -5,7 +5,6 @@ axiosClient.defaults.baseURL = '/';
 axiosClient.defaults.headers = {
   'Content-Type': 'application/json',
   Accept: 'application/json',
-  'Authorization': 'Bearer ',
   'Cache-Control': 'no-cache',
   'Pragma': 'no-cache',
   'Expires': '0',
