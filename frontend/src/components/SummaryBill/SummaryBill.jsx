@@ -61,10 +61,7 @@ export const SummaryBill = (props) => {
                 <Text className={classes.content} mt={20} mb={20}>Amenities Price: {props.amprice}</Text>
                 <Text className={classes.title} mt={20} mb={20}>Final Price: {((parseInt(roomPrice.data.finalSurgePrice) ) * room)+props.amprice}</Text>
               
-                {/* {props.rooms&&props.rooms.map((room)=>{
-         
-         return <RoomRow {...room}/>
-            })} */}
+        
             </Box>
         </>
     )

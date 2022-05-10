@@ -63,60 +63,60 @@ export function BookingSummary() {
       });
       setAmprice(amprice + prices);
     }
-    function bookNow() {
+  }
+  function bookNow() {
 
-      if (login.status == "unauth") {
+    if (login.status == "unauth") {
+      showNotification({
+        title: "Please Auth",
+        message: 'Please login to create booking!',
+        color: 'red',
+      });
+    } else {
+      let amens = bookingRooms.map(e => {
+        return { roomId: e.roomId, amenities: e.selectedAmenities.map(t => parseInt(t)) };
+      });
+      createBookingMutation.mutateAsync({
+        data: {
+          "bookingToDate": bookings.date.to,
+          "bookingFromDate": bookings.date.from,
+          "roomId": parseInt(bookings.roomID),
+          "hotelId": parseInt(bookings.hotelID),
+          "amenities": bookingRooms,
+          "noOfRooms": parseInt(bookings.room)
+        },
+        token: login.data.jwt.token
+      }).then((res) => {
         showNotification({
-          title: "Please Auth",
-          message: 'Please login to create booking!',
-          color: 'red',
-        });
-      } else {
-        let amens = bookingRooms.map(e => {
-          return { roomId: e.roomId, amenities: e.selectedAmenities.map(t => parseInt(t)) };
-        });
-        createBookingMutation.mutateAsync({
-          data: {
-            "bookingToDate": bookings.date.to,
-            "bookingFromDate": bookings.date.from,
-            "roomId": parseInt(bookings.roomID),
-            "hotelId": parseInt(bookings.hotelID),
-            "amenities": bookingRooms,
-            "noOfRooms": parseInt(bookings.room)
-          },
-          token: login.data.jwt.token
-        }).then((res) => {
-          showNotification({
-            title: "Success",
-            message: 'Your Booking is created Successfully',
-            color: "green"
-          })
+          title: "Success",
+          message: 'Your Booking is created Successfully',
+          color: "green"
         })
-      }
-
+      })
     }
 
-    /*
-     
-    */
-    return (
-      <>
-        <Container>
-          <BookingDetails bookings={bookings} />
-          <Grid mb={20}>
-            {bookingRooms.length > 0 && bookingRooms.map((room) => {
-              return <Grid.Col span={6}><BookingDetailsRoom key={room.roomIndex} amenities={amenityData} details={room} changeRoomAmenities={changeRoomAmenities} /></Grid.Col>
-            })}
-          </Grid>
-          {/* {bookingRooms.length > 0 && bookingRooms.map((room) => {
+  }
+
+  /*
+   
+  */
+  return (
+    <>
+      <Container>
+        <BookingDetails bookings={bookings} />
+        <Grid mb={20}>
+          {bookingRooms.length > 0 && bookingRooms.map((room) => {
+            return <Grid.Col span={6}><BookingDetailsRoom key={room.roomIndex} amenities={amenityData} details={room} changeRoomAmenities={changeRoomAmenities} /></Grid.Col>
+          })}
+        </Grid>
+        {/* {bookingRooms.length > 0 && bookingRooms.map((room) => {
 
         return <BookingDetailsRoom key={room.roomIndex} amenities={amenityData} details={room} changeRoomAmenities={changeRoomAmenities} />
       })} */}
-          <SummaryBill bookings={bookings} rooms={bookingRooms} amprice={amprice} />
-          <Button mt={30} onClick={bookNow}>Confirm Booking</Button>
-        </Container>
-      </>
+        <SummaryBill bookings={bookings} rooms={bookingRooms} amprice={amprice} />
+        <Button mt={30} onClick={bookNow}>Confirm Booking</Button>
+      </Container>
+    </>
 
-    );
-  }
+  );
 }
