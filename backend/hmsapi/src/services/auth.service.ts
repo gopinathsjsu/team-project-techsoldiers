@@ -41,25 +41,31 @@ export class AuthService {
           if (result == 'SUCCESS') {
             const data = { status: 'success' };
 
+            try {
 
-            // fetch the user details in db
-            const user = this.userService.userByEmail({
-              where: {
-                email: email
-              }
-            });
+              // fetch the user details in db
+              const user = this.userService.userByEmail({
+                where: {
+                  email: email
+                }
+              });
 
-            console.log(user);
+              console.log(user);
 
-            // saving the customer details in db
-            const customer = this.custService.createCustomer({
-              rewards: 100,
-              user: {
-                connect: { id: Number(user.id) },
-              },
-            });
+              // saving the customer details in db
+              const customer = this.custService.createCustomer({
+                rewards: 100,
+                user: {
+                  connect: { id: Number(user.id) },
+                },
+              });
 
-            console.log(customer);
+              console.log(customer);
+
+            } catch {
+
+              console.log("Error while adding customer details");
+            }
 
             resolve(data);
           }
