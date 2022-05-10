@@ -7,12 +7,20 @@ import BookingDetails from "../../components/BookingDetails";
 import { getAmenityByHotelId } from '../../services/AmenityService';
 import BookingDetailsRoom from "../../components/BookingDetailsRoom";
 import SummaryBill from "../../components/SummaryBill";
+import { useMutation } from "react-query";
+import { createBookings } from "../../services/BookingService";
+import { showNotification } from "@mantine/notifications";
 
 export function BookingSummary() {
 
   const cartData = useSelector(state => state.persistedReducer.booking);
   const [amenityData, setAmenityData] = useState([])
   const bookings = cartData[0].data;
+
+  const login = useSelector((state) => state.persistedReducer.login);
+
+
+  const createBookingMutation = useMutation(createBookings);
 
   console.log("bookings  ", bookings);
   useEffect(() => {
@@ -28,7 +36,6 @@ export function BookingSummary() {
     }
     fetchData();
   }, []);
-  const auth = useSelector(state => state.login);
 
   let bookingRooms = [];
   //check if rooms are already configured in state
@@ -36,31 +43,46 @@ export function BookingSummary() {
   //else create
   for (let i = 0; i < bookings.room; i++) {
     bookingRooms.push({
-      roomIndex: i,
-      roomType: bookings.roomType,
+      roomId: i,
       selectedAmenities: [],
     });
   }
   console.log(bookingRooms);
-  let [amprice, setAmprice] = useState(0);
   function changeRoomAmenities(roomid, amenities) {
     console.log(roomid + " ", amenities);
     bookingRooms[roomid].selectedAmenities = amenities;
-    calculateAmenities(bookingRooms);
-  }
-  function calculateAmenities(bookingRooms) {
-    for (let bookingRoom of bookingRooms) {
-      let amen = amenityData.filter(e => bookingRoom.selectedAmenities.indexOf(e.id));
-      let prices = 0;
-      amen.forEach(e => {
-        prices += parseInt(e.price);
-      });
-      setAmprice(amprice + prices);
-    }
-    console.log(amprice);
   }
   function bookNow() {
-    console.log(bookingRooms);
+
+    if (login.status == "unauth") {
+      showNotification({
+        title: "Please Auth",
+        message: 'Please login to create booking!',
+        color: 'red',
+      });
+    } else {
+      let amens = bookingRooms.map(e => {
+        return { roomId: e.roomId, amenities: e.selectedAmenities.map(t => parseInt(t)) };
+      });
+      createBookingMutation.mutateAsync({
+        data: {
+          "bookingToDate": bookings.date.to,
+          "bookingFromDate": bookings.date.from,
+          "roomId": parseInt(bookings.roomID),
+          "hotelId": parseInt(bookings.hotelID),
+          "amenities": amens,
+          "noOfRooms": parseInt(bookings.room)
+        },
+        token: login.data.jwt.token
+      }).then((res) => {
+        showNotification({
+          title: "Success",
+          message: 'Your Booking is created Successfully',
+          color: "green"
+        })
+      })
+    }
+
   }
 
   /*
