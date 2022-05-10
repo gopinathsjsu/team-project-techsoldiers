@@ -67,6 +67,7 @@ export function AuthModal() {
         })
 
         dispatch(loginState(data));
+        dispatch(modalClose());
       }).catch((err) => {
           form.setValues({
             email: email

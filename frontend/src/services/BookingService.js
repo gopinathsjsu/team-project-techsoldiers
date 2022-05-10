@@ -13,7 +13,11 @@ export function cancelMyBooking(id){
     
 }
 
-export function createBookings(){
-
-    return axiosClient.post('api/booking')
+export function createBookings(payload){
+    
+    return axiosClient.post('api/booking', payload.data, {
+        headers: {
+            'Authorization': `Bearer ${payload.token}`,
+        }
+    });
 }

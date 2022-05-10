@@ -49,6 +49,7 @@ export function TopBar() {
   const dispatch = useDispatch();
   const theme = useMantineTheme();
   const bookings = useSelector((state) => state.persistedReducer.booking);
+  const login = useSelector((state) => state.persistedReducer.login);
   return (
     <Header height={56} className={classes.header}>
       <div className={classes.inner}>
@@ -58,32 +59,33 @@ export function TopBar() {
 
         <Group>
           <Group ml={50} spacing={5} className={classes.links}>
-        <Button onClick={() => dispatch(modalOpen())}>Login</Button>
-      <Group position="center">
-      <Menu withArrow size={300} placement="center" transition="pop">
-        {
-        bookings.map((item, key) => (
-            <Menu.Item key={key}>
-          <Group>
-            <div>
-              <Text weight={500}>{item.data.roomType}</Text>
-              <Text size="xs" color="dimmed">
-               No. of Person: {item.data.person}, No. of Room: {item.data.room}
-              </Text>
-              <Text size="xs" color="dimmed">
-               Hotel: { item.data.hotelName }
-              </Text>
-            </div>
-          </Group>
-        </Menu.Item>
-          ))
-        }
-      </Menu>
-    </Group>
+            {login.status == 'unauth' && <Button onClick={() => dispatch(modalOpen())}>Login</Button>}
+            {login.status == 'auth' && login.data.jwt.payload.name}
+            <Group position="center">
+              <Menu withArrow size={300} placement="center" transition="pop">
+                {
+                  bookings.map((item, key) => (
+                    <Menu.Item key={key}>
+                      <Group>
+                        <div>
+                          <Text weight={500}>{item.data.roomType}</Text>
+                          <Text size="xs" color="dimmed">
+                            No. of Person: {item.data.person}, No. of Room: {item.data.room}
+                          </Text>
+                          <Text size="xs" color="dimmed">
+                            Hotel: {item.data.hotelName}
+                          </Text>
+                        </div>
+                      </Group>
+                    </Menu.Item>
+                  ))
+                }
+              </Menu>
+            </Group>
           </Group>
         </Group>
       </div>
-      
+
     </Header>
   );
 }
