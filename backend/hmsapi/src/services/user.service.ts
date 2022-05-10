@@ -18,7 +18,7 @@ export class UserService {
     });
   }
 
-  async custIdByUserId(userWhereUniqueInput: Prisma.UserWhereUniqueInput): Promise<Number> {
+  async custIdByUserId(userWhereUniqueInput: Prisma.UserWhereUniqueInput): Promise<number> {
     const customerId = await this.prisma.user.findUnique({
       where: userWhereUniqueInput,
       select: {
@@ -40,7 +40,7 @@ export class UserService {
     });
   }
 
-  async custIdByUserEmail(params: { where?: Prisma.UserWhereInput }): Promise<Number> {
+  async custIdByUserEmail(params: { where?: Prisma.UserWhereInput }): Promise<number> {
     const { where } = params;
     const customer = await this.prisma.user.findMany({
       where,
@@ -65,5 +65,26 @@ export class UserService {
 
     console.log(user);
     return user[0];
+  }
+
+  async fetchUserRole(params: { where?: Prisma.UserWhereInput }): Promise<string> {
+    const { where } = params;
+    const user = await this.prisma.user.findMany({
+      where,
+      include: {
+        customer: true,
+        employee: true,
+      },
+    });
+
+    console.log(user[0]);
+
+    if (user[0].customer == null && user[0].employee == null) {
+      return 'No Roles Assigned';
+    } else if (user[0].customer == null) {
+      return 'Admin';
+    } else {
+      return 'User';
+    }
   }
 }
