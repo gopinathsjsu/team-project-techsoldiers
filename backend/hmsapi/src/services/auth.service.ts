@@ -1,16 +1,21 @@
 import { AuthConfig } from '../config/auth.config';
 import { Inject, Injectable } from '@nestjs/common';
+import { User, Prisma, Customer } from '.prisma/client';
+import { PrismaService } from './prisma.service';
+import { UserService } from './user.service';
 import {
   AuthenticationDetails,
   CognitoUser,
   CognitoUserPool,
   CognitoUserAttribute,
 } from 'amazon-cognito-identity-js';
+import { CustomerService } from './customer.service';
+
 
 @Injectable()
 export class AuthService {
   private userPool: CognitoUserPool;
-  constructor(private readonly authConfig: AuthConfig) {
+  constructor(private readonly authConfig: AuthConfig, private readonly userService: UserService, private readonly custService: CustomerService) {
     this.userPool = new CognitoUserPool({
       UserPoolId: this.authConfig.userPoolId,
       ClientId: this.authConfig.clientId,
@@ -25,7 +30,7 @@ export class AuthService {
       Pool: this.userPool,
     };
 
-    
+
     const cognitoUser = new CognitoUser(userData);
 
     return new Promise((resolve, reject) => {
@@ -35,6 +40,27 @@ export class AuthService {
         } else {
           if (result == 'SUCCESS') {
             const data = { status: 'success' };
+
+
+            // fetch the user details in db
+            const user = this.userService.userByEmail({
+              where: {
+                email: email
+              }
+            });
+
+            console.log(user);
+
+            // saving the customer details in db
+            const customer = this.custService.createCustomer({
+              rewards: 100,
+              user: {
+                connect: { id: Number(user.id) },
+              },
+            });
+
+            console.log(customer);
+
             resolve(data);
           }
         }
@@ -50,6 +76,9 @@ export class AuthService {
     const { email, password, name } =
       newUser;
     const data = {};
+
+
+
     return new Promise((resolve, reject) => {
       this.userPool.signUp(
         email,
@@ -68,12 +97,21 @@ export class AuthService {
             reject(error);
           } else {
             const data = {
+
               username: result.user.getUsername(),
               userConfirmation: result.userConfirmed,
               status: 'success',
             };
+
+            // saving the user details in db
+            const user = this.userService.createUser({
+              email,
+              name,
+              phone: '6693020897'
+            });
+
             resolve(data);
-            
+
           }
         },
       );
@@ -102,7 +140,7 @@ export class AuthService {
           resolve(result);
         },
         onFailure: (err) => {
-          if(err.code === "UserNotConfirmedException"){
+          if (err.code === "UserNotConfirmedException") {
             newUser.getAttributeVerificationCode(email, {
               onSuccess: function (success: string): void {
                 resolve(success);
@@ -110,9 +148,9 @@ export class AuthService {
               onFailure: function (err: Error): void {
                 reject(err);
               }
-        })
-          }else{ reject(err) }
-  
+            })
+          } else { reject(err) }
+
         }
         ,
         newPasswordRequired: (userAttributes, requiredAttributes) => {

@@ -40,6 +40,14 @@ export class UserService {
     return customerId.customer.customerId;
   }
 
+
+  async createUser(data: Prisma.UserCreateInput): Promise<User> {
+    return this.prisma.user.create({
+        data,
+    });
+}
+
+
   async custIdByUserEmail(params: {
     where?: Prisma.UserWhereInput;
     }): Promise<Number> {
@@ -57,5 +65,18 @@ export class UserService {
 
     console.log(customer);
     return customer[0].customer.customerId;
+  }
+
+
+  async userByEmail(params: {
+    where?: Prisma.UserWhereInput;
+    }): Promise<User> {
+        const { where } = params;
+    const user = await this.prisma.user.findMany({
+        where,
+    });
+
+    console.log(user);
+    return user[0];
   }
 }

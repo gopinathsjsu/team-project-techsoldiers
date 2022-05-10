@@ -43,6 +43,7 @@ import { BookingRoomAmenitiesService } from './services/bookingroomamenities.ser
   providers: [
     PrismaService,
     LocationService,
+    UserService,
     AuthConfig,
     JwtStrategy,
     AuthService,
@@ -55,7 +56,7 @@ import { BookingRoomAmenitiesService } from './services/bookingroomamenities.ser
     CustomerService,
     PricingService,
     AppService,
-    UserService,
+    
     BookingRoomAmenitiesService,
   ],
 })
