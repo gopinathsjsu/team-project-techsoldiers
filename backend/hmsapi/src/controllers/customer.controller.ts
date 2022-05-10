@@ -1,8 +1,9 @@
-import { Controller, Get, Param , Query} from '@nestjs/common';
+import { Controller, Get, Param , Query, Req, UseGuards} from '@nestjs/common';
 import { CustomerService } from 'src/services/customer.service';
 import { Customer as CustomerModel } from '.prisma/client';
 import { UserService } from 'src/services/user.service';
 import { stringify } from 'querystring';
+import { AuthGuard } from '@nestjs/passport';
 
 
 @Controller('customer')
@@ -14,26 +15,24 @@ export class CustomerController {
     return this.custService.costumers();
   }
 
-  @Get('/:id')
-  async getCustomerById(@Param('id') id: string): Promise<CustomerModel> {
-    return this.custService.customerById({ customerId: Number(id) });
+  @Get('/bookings')
+  @UseGuards(AuthGuard('jwt'))
+  async getMyBookings(@Req() req : any ): Promise<CustomerModel> {
+
+    console.log("Email : "+ req.user.email);
+
+        // fetching customerID based on email
+        const custId = await this.userService.custIdByUserEmail({ 
+          where: {
+              email: req.user.email,
+          }
+        })
+  
+    console.log(custId);
+
+   return this.custService.myBookings({ customerId: Number(custId) }); 
+    
   }  
 
-  @Get('/bookings/:email')
-  async getMyBookings(@Param('email') email: string): Promise<CustomerModel> {
-  
-    //const custId = await this.userService.custIdByUserId({id: Number(id)});
-    const custId = await this.userService.custIdByUserEmail({ 
-      where: {
-         
-        email: email,
-      
-       }
-    
-    })
-    console.log(custId);
-   return this.custService.myBookings({ customerId: Number(custId) });
-    
-  }  
 
 }

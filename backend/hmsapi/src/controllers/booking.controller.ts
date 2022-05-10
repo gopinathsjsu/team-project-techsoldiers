@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Body, Post, Put, Req, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Body, Post, Put, Req, Request, UseGuards, HttpException, HttpStatus } from '@nestjs/common';
 import { BookingService } from 'src/services/booking.service';
 import { Booking as BookingModel } from '.prisma/client';
 import { BookingRequest, RoomAmenitiesRequest } from 'src/models/BookingRequest';
@@ -56,17 +56,17 @@ export class BookingController {
     //fetch room
     const currRoom = await this.roomService.getHotelRoombyHotelIdandRoomId({
       where: {
-        hotelId: hotelId,
+        hotelId: Number(hotelId),
         roomId: roomId,
       },
     });
-    const roomscount = await this.roomAvailabilityService.fetchRoomAvailability(hotelId, roomId, bookingFromDate, bookingToDate, currRoom.numberOfRooms);
+    const roomscount = await this.roomAvailabilityService.fetchRoomAvailability(Number(hotelId), roomId, bookingFromDate, bookingToDate, currRoom.numberOfRooms);
     if (noOfRooms > roomscount) {
       //throw error
     } else {
       //add them
       //create booking
-      const pricePerRoom = await this.calculatePrice(hotelId, roomId, bookingFromDate, bookingToDate);
+      const pricePerRoom = await this.calculatePrice(Number(hotelId), roomId, bookingFromDate, bookingToDate);
       let totalPrice = pricePerRoom * noOfRooms;
       const amenitiesPrice = await this.calculateAmenities(amenities);
       totalPrice += amenitiesPrice;
