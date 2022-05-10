@@ -31,4 +31,19 @@ export class CustomerService {
       }
     });
   }
+
+  async createCustomer(data: Prisma.CustomerCreateInput): Promise<Customer> {
+    return this.prisma.customer.create({
+        data,
+    });
+}
+
+async updateRewards(params: { where: Prisma.CustomerWhereUniqueInput; data: Prisma.CustomerUpdateInput }): Promise<Customer> {
+  const { where, data } = params;
+  return this.prisma.customer.update({
+    data,
+    where,
+  });
+}
+
 }

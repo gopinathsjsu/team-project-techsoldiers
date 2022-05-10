@@ -62,7 +62,7 @@ model Amenities {
 model User {
   id    Int    @id @default(autoincrement())
   name  String
-  phone String
+  phone String  @default("6693020897")
   email String
 
   customer Customer?
