@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Location {
+  id      Int     @id @default(autoincrement())
+  city    String
+  country String
+  address String?
+  hotels  Hotel[]
+}
+
+model Hotel {
+  id          Int         @id @default(autoincrement())
+  name        String
+  locationid  Int
+  location    Location    @relation(fields: [locationid], references: [id])
+  description String
+  hotelRooms  HotelRoom[]
+  Employee    Employee[]
+  booking Booking[]
+}
+
+model Room {
+  id           Int         @id @default(autoincrement())
+  roomName     String
+  roomCapacity Int
+  description  String
+  hotelRooms   HotelRoom[]
+}
+
+model HotelRoom {
+
+  id            Int     @id @default(autoincrement())
+  hotelId       Int
+  hotel         Hotel   @relation(fields: [hotelId], references: [id])
+  roomId        Int
+  room          Room    @relation(fields: [roomId], references: [id])
+  numberOfRooms Int
+  pricePerRoom  Decimal
+  @@unique([hotelId, roomId])
+  bookingRoomAmenities BookingRoomAmenities[]
+  pricingType          PricingType[]
+}
+
+model Amenities {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  price       Decimal
+
+}
+
+model User {
+  id    Int    @id @default(autoincrement())
+  name  String
+  phone String
+  email String
+
+  customer Customer?
+  employee Employee?
+}
+
+model Customer {
+  customerId Int       @unique
+  user       User      @relation(fields: [customerId], references: [id])
+  rewards    Decimal
+  bookings   Booking[]
+
+}
+
+model Employee {
+  empId   Int   @unique
+  user    User  @relation(fields: [empId], references: [id])
+  hotelId Int
+  hotel   Hotel @relation(fields: [hotelId], references: [id])
+
+}
+
+model Booking {
+
+  id                   Int                    @id @default(autoincrement())
+  bookingToDate        DateTime
+  bookingFromDate      DateTime
+  status               String
+  customerId           Int
+  customer             Customer?              @relation(fields: [customerId], references: [customerId])
+  bookingRoomAmenities BookingRoomAmenities[]
+  totalPrice           Decimal
+  hotelId Int
+  hotel Hotel  @relation(fields: [hotelId], references: [id])
+  bookingHistory    String @default("")
+
+}
+
+model BookingRoomAmenities {
+
+  id          Int       @id @default(autoincrement())
+  hotelRoomId Int
+  hotelRoom   HotelRoom @relation(fields: [hotelRoomId], references: [id])
+  bookingId   Int
+  booking     Booking   @relation(fields: [bookingId], references: [id])
+  amenities   String
+  totalPrice  Decimal
+
+}
+
+model PricingType {
+
+  id           Int       @id @default(autoincrement())
+  hotelRoomId  Int
+  hotelRoom    HotelRoom @relation(fields: [hotelRoomId], references: [id])
+  strategyType Int
+  fromDate     DateTime
+  endDate      DateTime
+  DayType      String
+  priceFactor  Decimal
+  name         String
+
+}

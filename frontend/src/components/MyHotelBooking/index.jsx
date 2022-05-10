@@ -1,0 +1,1 @@
+export { MyHotelBooking as default } from './MyHotelBooking'
