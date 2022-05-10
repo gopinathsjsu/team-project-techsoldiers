@@ -2,11 +2,12 @@ import React, { Suspense, useEffect, useState } from "react";
 import { Box, Button, Card, Container, Grid } from "@mantine/core";
 import Amenities from "../../components/Amenities";
 import { useSelector } from 'react-redux';
-import { useLazyQuery } from "react-query";
+
 import BookingDetails from "../../components/BookingDetails";
 import { getAmenityByHotelId } from '../../services/AmenityService';
 import BookingDetailsRoom from "../../components/BookingDetailsRoom";
 import SummaryBill from "../../components/SummaryBill";
+
 export function BookingSummary() {
 
   const cartData = useSelector(state => state.persistedReducer.booking);
@@ -48,6 +49,7 @@ function changeRoomAmenities(roomid, amenities) {
 function bookNow(){
   console.log(bookingRooms);
 }
+
 /*
  
 */

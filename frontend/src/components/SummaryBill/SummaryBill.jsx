@@ -1,4 +1,7 @@
 import { createStyles, Text, Box } from '@mantine/core';
+import { getRoomPriceFinal } from "../../services/RoomService";
+import { useLazyQuery, useMutation, useQuery } from "react-query";
+import { useState } from 'react';
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -26,17 +29,27 @@ const RoomRow=(props)=>{
     <div>{props.roomType}</div>
     </>
 }
+
+
 export const SummaryBill = (props) => {
     const { classes } = useStyles();
     let {  hotelName, person, room, roomType } = props.bookings;
+    const { data: roomPrice , error, isError, isLoading } = useQuery(['getRoomPrice', props.bookings.roomID],() => getRoomPriceFinal(props.bookings.hotelID, props.bookings.roomID, props.bookings.date.from, props.bookings.date.to), {
+        suspense: true
+    });
+
+    if(isLoading){
+        <Text>Loading...</Text>
+    }
     
     return (
     <>
         <Box className={classes.border}>
             <Text className={classes.title} mt={20} mb={20} transform="uppercase">Total Bill</Text>
-            {props.rooms&&props.rooms.map((room)=>{
+            <Text className={classes.title} mt={20} mb={20}>Total Base Price: {(parseInt(roomPrice.data.basePrice) * 7)* room}</Text>
+            {/* {props.rooms&&props.rooms.map((room)=>{
                 return <RoomRow {...room}/>
-            })}
+            })} */}
         </Box>
     </>
     )

@@ -5,7 +5,10 @@ axiosClient.defaults.baseURL = '/';
 axiosClient.defaults.headers = {
   'Content-Type': 'application/json',
   Accept: 'application/json',
-  'Authorization': 'Bearer '
+  'Authorization': 'Bearer ',
+  'Cache-Control': 'no-cache',
+  'Pragma': 'no-cache',
+  'Expires': '0',
 };
 //All request will wait 2 seconds before timeout
 axiosClient.defaults.timeout = 2000;
