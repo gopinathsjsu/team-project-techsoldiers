@@ -42,7 +42,7 @@ export class BookingController {
   @Post()
   @UseGuards(AuthGuard('jwt'))
   async createBooking(@Req() req: any, @Body() bookingData: BookingRequest): Promise<BookingModel> {
-    const { bookingToDate, bookingFromDate, hotelId, roomId, noOfRooms, amenities } = bookingData;
+    let { bookingToDate, bookingFromDate, hotelId, roomId, noOfRooms, amenities } = bookingData;
     console.log(req.user.email);
 
     // fetching customerID based on email
@@ -60,6 +60,11 @@ export class BookingController {
         roomId: roomId,
       },
     });
+
+     bookingFromDate = new Date(bookingFromDate);
+     bookingToDate = new Date(bookingToDate);
+    
+    console.log(bookingFromDate.getTime());
     const roomscount = await this.roomAvailabilityService.fetchRoomAvailability(Number(hotelId), roomId, bookingFromDate, bookingToDate, currRoom.numberOfRooms);
     if (noOfRooms > roomscount) {
       //throw error
@@ -67,9 +72,13 @@ export class BookingController {
       //add them
       //create booking
       const pricePerRoom = await this.calculatePrice(Number(hotelId), roomId, bookingFromDate, bookingToDate);
+      console.log(pricePerRoom);
       let totalPrice = pricePerRoom * noOfRooms;
+      console.log(totalPrice);
+
       const amenitiesPrice = await this.calculateAmenities(amenities);
       totalPrice += amenitiesPrice;
+      console.log(totalPrice);
       const status = 'Booked';
       const booking = await this.bookingService.createBooking({
         bookingToDate,
@@ -100,7 +109,7 @@ export class BookingController {
       console.log(hotelRoomId);
 
       for (let _i = 0; _i < noOfRooms; _i++) {
-        console.log('AMenities :' + amenities[_i].amenities);
+        console.log('Amenities :' + amenities[_i].amenities);
         const bookingRoomAmenitiesData = await this.bookingRoomAmenitiesService.createBookingRoomAmenities({
           totalPrice,
           amenities: amenities[_i].amenities + '',
@@ -120,7 +129,8 @@ export class BookingController {
   }
 
   @Put('/:id')
-  async cancelBooking(@Param('id') id: string): Promise<BookingModel> {
+  @UseGuards(AuthGuard('jwt'))
+  async cancelBooking(@Req() req: any,@Param('id') id: string): Promise<BookingModel> {
     return this.bookingService.updateBooking({
       where: { id: Number(id) },
       data: { status: 'Cancel' },
@@ -143,7 +153,7 @@ export class BookingController {
     return await this.bookingService.updateBooking({
       where: { id: Number(id) },
       data: {
-        status: 'ChangedBooking',
+        status: 'Booked',
         bookingHistory: bookingHistory,
         bookingFromDate: bookingFromDate,
         bookingToDate: bookingToDate,

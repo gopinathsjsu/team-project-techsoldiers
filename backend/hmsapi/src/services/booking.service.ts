@@ -73,6 +73,7 @@ export class BookingService {
     const noOfDays = this.calculateDays(startDate, endDate);
     if (room) {
       if (pricings.length > 0) {
+        console.log("Inside prices.length: " + JSON.stringify(pricings));
         return this.processRoom(Number(roomId), room.pricePerRoom, startDate, endDate, pricings);
       } else {
         return Number(room.pricePerRoom) * noOfDays;
@@ -84,7 +85,11 @@ export class BookingService {
   async getAmenitiesPrice(ids: string[]) {}
 
   calculateDays(startDate: Date, endDate: Date): number {
+
+    console.log(endDate);
+    console.log(startDate);
     const difference_In_Time = endDate.getTime() - startDate.getTime();
+    
 
     // To calculate the no. of days between two dates
     const days = difference_In_Time / (1000 * 3600 * 24);
