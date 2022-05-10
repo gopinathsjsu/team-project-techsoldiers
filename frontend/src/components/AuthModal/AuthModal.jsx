@@ -15,8 +15,10 @@ import { login, register, confirm } from "../../services/AuthService";
 import { useDispatch, useSelector } from "react-redux";
 import { loginState } from "../../features/auth/loginSlice";
 import { registerState, confirmState } from "../../features/auth/registerSlice";
+import { modalClose } from "../../features/modal/modalSlice";
+import { showNotification } from "@mantine/notifications";
 
-export function AuthModal({ state, setState }) {
+export function AuthModal() {
   const loginMutation = useMutation(login);
   const registerMutation = useMutation(register);
   const confirmMutation = useMutation(confirm);
@@ -24,7 +26,7 @@ export function AuthModal({ state, setState }) {
   const dispatch = useDispatch();
   const registerCurrentState = useSelector((state) => state.register );
   const loginCurrentState = useSelector((state) => state.persistedReducer.login );
-  
+  const modalState = useSelector((state) => state.modal.state);
   const [type, toggle] = useToggle("login", ["login", "register", "confirm"]);
 
   const form = useForm({
@@ -58,7 +60,18 @@ export function AuthModal({ state, setState }) {
           refreshToken: res.data.refreshToken.token,
           accessToken: res.data.accessToken.jwtToken,
         };
+
+        showNotification({
+          title: "Success",
+          message: "You have successfully logged!"
+        })
+
         dispatch(loginState(data));
+      }).catch((err) => {
+          form.setValues({
+            email: email
+          })
+          toggle("confirm");
       });
   }
 
@@ -84,13 +97,17 @@ export function AuthModal({ state, setState }) {
     }).then((res) => {
         console.log(res);
         confirmState();
-        setState(false);
+        showNotification({
+          title: "Registered!",
+          message:"You have successfully added your account!",
+        })
+        dispatch(modalClose());
     }).catch((err) => console.log(err))
   }
   return (
     <Drawer
-      opened={state}
-      onClose={() => setState(false)}
+      opened={modalState}
+      onClose={() => dispatch(modalClose())}
       title="Authenticate"
       padding="xl"
       size="xl"

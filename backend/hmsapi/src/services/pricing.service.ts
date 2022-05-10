@@ -10,16 +10,16 @@ export class PricingService {
     return this.prisma.pricingType.findMany({});
   }
 
-  async pricingforHotel(
-    hotelid: number,
-    roomid: number,
-  ): Promise<PricingType[] | null> {
+  async pricingforHotel(hotelid: number, roomid: number): Promise<APIPricingType[] | null> {
     return this.prisma.pricingType.findMany({
       where: {
         hotelRoom: {
           hotelId: hotelid,
           roomId: roomid,
         },
+      },
+      include: {
+        hotelRoom: true,
       },
     });
   }
@@ -35,4 +35,5 @@ export class PricingService {
       },
     });
   }
+ 
 }

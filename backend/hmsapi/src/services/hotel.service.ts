@@ -1,5 +1,5 @@
 import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
-import { Hotel, Prisma, Location } from '.prisma/client';
+import { Hotel, Prisma } from '.prisma/client';
 import { PrismaService } from './prisma.service';
 
 @Injectable()
@@ -27,6 +27,15 @@ export class HotelService {
       const { where } = params;
       return this.prisma.hotel.findMany({
         where,
+        include: {
+          location:true,
+          hotelRooms:{
+             include: {
+               room:true
+             } 
+
+          }
+        }
     
       });
     }

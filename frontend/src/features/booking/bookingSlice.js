@@ -1,10 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
-    data: null,
-    status: "noBooking",
-    confirm: false
-}
+const initialState = [];
 
 export const bookingSlice = createSlice({
     name: "booking",
@@ -12,9 +8,9 @@ export const bookingSlice = createSlice({
     reducers: {
       // can add more reducers
       bookingStatus: (state, action) => {
-        state.status = action.payload.status;
-        state.data = action.payload.data;
-        state.confirm = false;
+        // state = [];  
+        // state.push(action.payload)
+        state.unshift(action.payload);
       }
     },
   })

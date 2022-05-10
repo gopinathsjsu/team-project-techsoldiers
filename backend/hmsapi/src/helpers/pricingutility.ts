@@ -6,41 +6,25 @@ import { PricingContext } from './strategy/PricingContext';
 import { SeasonStrategy } from './strategy/SeasonStrategy';
 
 export class PricingUtility {
-  constructor(private p: Pricing) {
-    console.log('Test');
-  }
+  constructor(private p: Pricing) {}
   createStrategy(pType: PricingType): Strategy {
     let strategy: Strategy = null;
     if (pType.strategyType == 1) {
       strategy = new DayStrategy(pType.DayType, Number(pType.priceFactor));
     } else {
-      console.log(
-        new Date(pType.fromDate).toLocaleDateString() +
-          '  : ' +
-          new Date(pType.endDate).toLocaleDateString(),
-      );
-      strategy = new SeasonStrategy(
-        new Date(pType.fromDate),
-        new Date(pType.endDate),
-        Number(pType.priceFactor),
-      );
+      console.log(new Date(pType.fromDate).toLocaleDateString() + '  : ' + new Date(pType.endDate).toLocaleDateString());
+      strategy = new SeasonStrategy(new Date(pType.fromDate), new Date(pType.endDate), Number(pType.priceFactor));
     }
     return strategy;
   }
   calculatePrices(): number[] {
     // eslint-disable-next-line prettier/prettier
-    console.log(
-      this.p.startDate.toLocaleDateString() +
-        ' ' +
-        this.p.endDate.toLocaleDateString() +
-        ' ' +
-        this.p.basePrice,
-    );
+    console.log(this.p.startDate.toLocaleDateString() + ' ' + this.p.endDate.toLocaleDateString() + ' ' + this.p.basePrice);
     console.log(this.p.strategies);
     const result: number[] = [];
     //for each day from start to end date, calculate the price and return
     const days = this.calculateDays();
-    let currDate = new Date(this.p.startDate);
+    const currDate = new Date(this.p.startDate);
     const pricingStrategies: PricingContext[] = [];
     for (const strategy of this.p.strategies) {
       pricingStrategies.push(new PricingContext(this.createStrategy(strategy)));
@@ -57,14 +41,11 @@ export class PricingUtility {
       result[i] = Math.max(...prices);
       currDate.setDate(currDate.getDate() + 1);
     }
-    //for each day see if surge applies
-    currDate = new Date(this.p.startDate);
 
     return result;
   }
   calculateDays(): number {
-    const difference_In_Time =
-      this.p.endDate.getTime() - this.p.startDate.getTime();
+    const difference_In_Time = this.p.endDate.getTime() - this.p.startDate.getTime();
 
     // To calculate the no. of days between two dates
     const days = difference_In_Time / (1000 * 3600 * 24);

@@ -1,0 +1,1 @@
+export { SummaryBill as default } from './SummaryBill'

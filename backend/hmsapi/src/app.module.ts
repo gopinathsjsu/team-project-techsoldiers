@@ -20,8 +20,15 @@ import { RoomController } from './controllers/room.controller';
 import { AmenitiesController } from './controllers/amenities.controller';
 import { RoomService } from './services/room.service';
 import { AmenitiesService } from './services/amenities.service';
+import { CustomerController } from './controllers/customer.controller';
+import { CustomerService } from './services/customer.service';
+
 import { PricingController } from './controllers/pricing.controller';
 import { PricingService } from './services/pricing.service';
+import { HotelRoomService } from './services/hotelroom.service';
+import { UserService } from './services/user.service';
+import { RoomAvailabilityService } from './services/roomavailability.service';
+import { BookingRoomAmenitiesService } from './services/bookingroomamenities.service';
 /* eslint-disable */
 @Module({
   imports: [
@@ -32,28 +39,24 @@ import { PricingService } from './services/pricing.service';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     ConfigModule.forRoot(),
   ],
-  controllers: [
-    AppController,
-    LocationController,
-    HotelController,
-    AuthController,
-    BookingController,
-    RoomController,
-    AmenitiesController,
-    PricingController,
-  ],
+  controllers: [AppController, LocationController, HotelController, AuthController, BookingController, RoomController, AmenitiesController, CustomerController, PricingController],
   providers: [
     PrismaService,
     LocationService,
     AuthConfig,
     JwtStrategy,
     AuthService,
+    RoomAvailabilityService,
     BookingService,
     HotelService,
+    HotelRoomService,
     RoomService,
     AmenitiesService,
+    CustomerService,
     PricingService,
-    AppService
+    AppService,
+    UserService,
+    BookingRoomAmenitiesService,
   ],
 })
 export class AppModule {}

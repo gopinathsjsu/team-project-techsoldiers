@@ -1,29 +1,21 @@
 import React, { useState } from "react";
 import TopBar from "../../components/TopBar";
 import { Center } from "@mantine/core";
-import SearchComponent  from "../../components/SearchComponent";
 import AuthModal from "../../components/AuthModal";
+import { getLocations } from "../../services/LocationService";
 
 import { Button,Group} from '@mantine/core';
+import Search from "../../components/Search";
 
 export function Home() {
-  const links = [
-  
-  ];
-  const[openAuthModal, setOpenAuthModal] = useState(false);
-
   return (
     <>
-      <TopBar links={links} />
-      <SearchComponent/>
-      <Center>
-
+      <Search componentName="Home"/>
       { /* <Link to="/listing">Listing</Link>Search Bar for location and initial data will go here. */}
-      <Group position="center">
+      {/* <Group position="center">
         <Button onClick={() => setOpenAuthModal(true)}>Open Drawer</Button>
       </Group>
-      </Center>
-      <AuthModal state={openAuthModal} setState={setOpenAuthModal} />
+      <AuthModal state={openAuthModal} setState={setOpenAuthModal} /> */}
     </>
   );
 }
