@@ -21,7 +21,7 @@ export class BookingController {
     private readonly roomAvailabilityService: RoomAvailabilityService,
     private readonly amenitiesService: AmenitiesService,
     private readonly custService: CustomerService,
-  ) { }
+  ) {}
 
   @Get()
   getAllBookings(): Promise<BookingModel[]> {
@@ -104,25 +104,22 @@ export class BookingController {
       const bookingId = booking.id;
       console.log(bookingId);
 
-      //update rewards for customer 
+      //update rewards for customer
       try {
+        const cust = await this.custService.customerById({ customerId: Number(custId) });
 
-        const cust = await this.custService.customerById({customerId: Number(custId) });
-
-        console.log("Customer reward : " + cust.rewards);
+        console.log('Customer reward : ' + cust.rewards);
 
         const reward = new Decimal(cust.rewards).add(100);
         const customer = await this.custService.updateRewards({
           where: { customerId: Number(custId) },
-          data: { rewards:reward },
+          data: { rewards: reward },
         });
 
         console.log(customer);
       } catch (err) {
-
-        console.log ("Eror while updating rewards");
+        console.log('Eror while updating rewards');
       }
-
 
       //fetching hotelRoomId based on hotel
 
