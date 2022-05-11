@@ -147,5 +147,7 @@ DB Design use cases to keep in mind:
 - Code Refactoration - Raj - Done
 - Final Integration of API- Raj - Done
 - Deployment of Code - Varun - Done
+- Change / Fetch Role API - Sakshi - Done
+- Update Rewards API - Sakshi - Done
 
 
