@@ -24,8 +24,13 @@ export class BookingController {
   ) {}
 
   @Get()
-  getAllBookings(): Promise<BookingModel[]> {
-    return this.bookingService.bookings();
+  @UseGuards(AuthGuard('jwt'))
+  async getAllBookings(@Req() req: any): Promise<BookingModel[]> {
+    console.log(req.user.email);
+    let resp = await this.bookingService.getBookingsbyCustId(req.user.email);
+    console.log(resp);
+    return resp;
+    //return this.bookingService.bookings();
   }
 
   @Get('/:id')
@@ -39,7 +44,7 @@ export class BookingController {
       where: {
         hotelId: Number(id),
       },
-    });
+    }); 
   }
 
   @Post()
@@ -56,15 +61,18 @@ export class BookingController {
       },
     });
     //see if rooms are available
-
+    console.log('before load ',{
+      hotelId: Number(hotelId),
+      roomId: Number(roomId),
+    });
     //fetch room
     const currRoom = await this.roomService.getHotelRoombyHotelIdandRoomId({
       where: {
         hotelId: Number(hotelId),
-        roomId: roomId,
+        roomId: Number(roomId),
       },
     });
-
+console.log('loaded');
     if (!currRoom) {
       throw new BadRequestException({ msg: 'No Such Room' });
     }
@@ -134,7 +142,7 @@ export class BookingController {
       console.log(hotelRoomId);
 
       for (let _i = 0; _i < noOfRooms; _i++) {
-       // console.log('Amenities :' + amenities[_i].amenities);
+        // console.log('Amenities :' + amenities[_i].amenities);
         const bookingRoomAmenitiesData = await this.bookingRoomAmenitiesService.createBookingRoomAmenities({
           totalPrice,
           amenities: amenities[_i].amenities + '',
@@ -148,7 +156,7 @@ export class BookingController {
 
         console.log(bookingRoomAmenitiesData.id);
       }
-      console.log('Created booking : ',bookingData );
+      console.log('Created booking : ', bookingData);
       return booking;
     }
   }
@@ -178,15 +186,19 @@ export class BookingController {
     const booking = await this.bookingService.bookingById({ id: Number(id) });
     console.log(booking);
     const currRoom = await this.bookingService.getRoomByBookingId(booking.id);
+
+    console.log('roomfetched');
     if (!currRoom) {
       throw new BadRequestException({ msg: 'Invalid Room' });
     }
-    const roomscount = await this.roomAvailabilityService.fetchRoomAvailability(Number(hotelId), currRoom.roomId, bookingFromDate, bookingToDate, currRoom.numberOfRooms);
+    const roomscount = await this.roomAvailabilityService.fetchRoomAvailability(Number(hotelId), Number(currRoom.roomId), bookingFromDate, bookingToDate, currRoom.numberOfRooms);
     if (roomscount < booking.bookingRoomAmenities.length) {
       throw new BadRequestException({ msg: 'Rooms not Available' });
     }
+    console.log('change');
     const bookingHistory = JSON.stringify({ startDate: booking.bookingFromDate, toDate: booking.bookingToDate });
-    const pricePerRoom = await this.calculatePrice(Number(hotelId), currRoom.roomId, bookingFromDate, bookingToDate);
+    console.log(currRoom);
+    const pricePerRoom = await this.calculatePrice(Number(hotelId), currRoom[0].roomId, bookingFromDate, bookingToDate);
     console.log(pricePerRoom);
     totalPrice = pricePerRoom * booking.bookingRoomAmenities.length;
     console.log(totalPrice);
@@ -216,6 +228,7 @@ export class BookingController {
   }
   async calculatePrice(hotelId: number, roomId: number, bookingFromDate: Date, bookingToDate: Date) {
     //calculate price for room
+    console.log('room cal',roomId);
     const pricePerRoom = await this.bookingService.getPriceForRoom(hotelId, roomId, bookingFromDate, bookingToDate);
     return pricePerRoom;
   }
