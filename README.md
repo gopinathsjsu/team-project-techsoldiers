@@ -6,6 +6,11 @@
 - Shivani Pandit
 - Varun Alla
 
+## Github Project Board
+https://github.com/gopinathsjsu/team-project-techsoldiers/projects?type=beta
+
+## Project Journal
+https://github.com/gopinathsjsu/team-project-techsoldiers/blob/main/Techsoldiers_ProjectJournal_SakshiJain.docx
 
 ## Technology Stack
 ### Front End:
