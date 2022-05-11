@@ -58,4 +58,3 @@ Jest
 
 ## Scrum
 - 2 Week Scrums
- - 3 days a week - Wednesday, thursday, friday
