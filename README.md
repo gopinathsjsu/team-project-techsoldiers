@@ -11,6 +11,9 @@ https://github.com/gopinathsjsu/team-project-techsoldiers/projects?type=beta
 
 ## Project Journal
 https://github.com/gopinathsjsu/team-project-techsoldiers/blob/main/Techsoldiers_ProjectJournal_SakshiJain.docx
+https://github.com/gopinathsjsu/team-project-techsoldiers/blob/main/Techsoldiers_ProjectJournal_RajKinkhabwala.pdf
+https://github.com/gopinathsjsu/team-project-techsoldiers/blob/main/Techsoldiers_ProjectJournal_VarunAlla.pdf
+https://github.com/gopinathsjsu/team-project-techsoldiers/blob/main/Techsoldiers_ProjectJournal_ShivaniPandit.pdf
 
 ## Technology Stack
 ### Front End:
