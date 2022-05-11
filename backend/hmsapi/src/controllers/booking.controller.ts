@@ -119,7 +119,8 @@ export class BookingController {
     }
   }
 
-  @Put('/:id')
+  @Put('/cancel/:id')
+  @UseGuards(AuthGuard('jwt'))
   async cancelBooking(@Param('id') id: string): Promise<BookingModel> {
     return this.bookingService.updateBooking({
       where: { id: Number(id) },
