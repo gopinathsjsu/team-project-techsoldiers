@@ -48,7 +48,7 @@ Jest
 
 ## DB Design
 
-![image](https://user-images.githubusercontent.com/90986401/167753788-aa7bc78f-1a9e-4967-8062-148014828a7c.png)
+![image](https://github.com/gopinathsjsu/team-project-techsoldiers/blob/main/Artifacts/DB-Design.jpeg)
 
 ## Use Case Diagram
 
