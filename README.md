@@ -60,7 +60,6 @@ Jest
 - 2 Week Scrums
 
 ## Design Decision
-Design Decision:
 
 For Backend:
 NestJs - To Streamline development flow we have used a framework, it also helps developers from different backgrounds work in a simple ecosystem. NestJS had many advantageous features like authentication, configuration, and design pattern built into it. Which aided us to make enterprise level software.
