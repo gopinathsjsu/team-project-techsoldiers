@@ -6,6 +6,8 @@ import { HotelRoomService } from './hotelroom.service';
 import { PricingResponse } from 'src/models/PricingResponse';
 import { Pricing } from 'src/models/Pricing';
 import { PricingUtility } from 'src/helpers/pricingutility';
+import { HotelRoomDTO } from 'src/models/HotelRoomDetails';
+import { BookingDTO } from 'src/models/BookingDTO';
 
 @Injectable()
 export class BookingService {
@@ -13,12 +15,15 @@ export class BookingService {
   async bookings(): Promise<Booking[] | null> {
     return this.prisma.booking.findMany({});
   }
-
-  async bookingById(bookingWhereUniqueInput: Prisma.BookingWhereUniqueInput): Promise<Booking | null> {
+  async getBookingsbyCustId(userid: string): Promise<BookingDTO[] | null> {
+    return this.prisma.$queryRaw`Select *,b.id as id,h.name from Booking b, Hotel h where  b.hotelId=h.id and customerId IN (select id from User where email=${userid})`;
+  }
+  async bookingById(bookingWhereUniqueInput: Prisma.BookingWhereUniqueInput): Promise<BookingDTO | null> {
     return this.prisma.booking.findUnique({
       where: bookingWhereUniqueInput,
       include: {
         hotel: true,
+        bookingRoomAmenities: true,
       },
     });
   }
@@ -58,7 +63,14 @@ export class BookingService {
     return this.prisma.booking.update({
       data,
       where,
+      include: {
+        bookingRoomAmenities: true,
+      },
     });
+  }
+  async getRoomByBookingId(bookingId: number): Promise<HotelRoomDTO> {
+    return this.prisma
+      .$queryRaw<HotelRoomDTO>`SELECT * from HotelRoom hr where hr.id = (SELECT br.hotelRoomId FROM Booking b,BookingRoomAmenities br where b.id=br.bookingId and b.id=${bookingId} LIMIT 1)`;
   }
 
   async getPriceForRoom(hotelId: number, roomId: number, startDate: Date, endDate: Date): Promise<number> {
@@ -73,6 +85,7 @@ export class BookingService {
     const noOfDays = this.calculateDays(startDate, endDate);
     if (room) {
       if (pricings.length > 0) {
+        console.log('Inside prices.length: ' + JSON.stringify(pricings));
         return this.processRoom(Number(roomId), room.pricePerRoom, startDate, endDate, pricings);
       } else {
         return Number(room.pricePerRoom) * noOfDays;
@@ -84,6 +97,8 @@ export class BookingService {
   async getAmenitiesPrice(ids: string[]) {}
 
   calculateDays(startDate: Date, endDate: Date): number {
+    console.log(endDate);
+    console.log(startDate);
     const difference_In_Time = endDate.getTime() - startDate.getTime();
 
     // To calculate the no. of days between two dates

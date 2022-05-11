@@ -17,13 +17,15 @@ import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import { searchState } from '../../features/search/searchSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { bookingStatus } from "../../features/booking/bookingSlice";
+import { showNotification } from "@mantine/notifications";
 
 export function Search({ componentName }) {
     
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const searchData = useSelector((state) => state.search.data);
-    console.log(searchData)
+    
     const containerStyle = {
         position: 'relative',
         padding: '1.6em'
@@ -100,6 +102,22 @@ export function Search({ componentName }) {
         person: person,
         room: room
     }))
+    console.log(componentName);
+    if(componentName == "Booking"){
+      dispatch(bookingStatus({
+       data:{ 
+        location: location,
+        date: date,
+        person: person,
+        room: room
+      }
+    }))
+
+    showNotification({
+      title: "Successfully Updated",
+      message: "You have updated successfully"
+    })
+    }
     
     if(componentName == "Home"){
     navigate(`location/${location}`);
@@ -107,7 +125,48 @@ export function Search({ componentName }) {
 
   }
 
+  function searchBooking(){
+    
+  }
 
+  function changePerson(value){
+    setPerson(value);
+    console.log(value);
+  }
+
+  function searchHandler(){
+    if(componentName == "Booking"){
+      console.log(componentName)
+      if(!location || location == ""){
+        setLocationError("Select a Location!");
+        return;
+    }
+    console.log("this is person: "+ person,"this is room: "+room)
+    // Setting the state for the search
+    dispatch(searchState({
+        location: location,
+        date: date,
+        person: person,
+        room: room
+    }));
+
+    dispatch(bookingStatus({
+       data:{ 
+        location: location,
+        date: date,
+        person: person,
+        room: room
+      }
+    }));
+
+    showNotification({
+      title: "Successfully Updated",
+      message: "You have updated successfully"
+    });
+    }else {
+      search();
+    }
+  }
   return (
     <Container size="xl">
       <Grid>
@@ -155,7 +214,7 @@ export function Search({ componentName }) {
                   hideControls
                   value={searchData != null ? searchData.person : person}
                   placeholder={person}
-                  onChange={setPerson}
+                  onChange={changePerson}
                   handlersRef={personHandler}
                   max={10}
                   min={1}
@@ -217,8 +276,8 @@ export function Search({ componentName }) {
           </InputWrapper>
         </Grid.Col>
         <Grid.Col span={2}>
-        <Container style={containerStyle} >
-        <Button variant="gradient" color="dark" onClick={(e) => search()}>Search</Button>
+        <Container style={containerStyle} > 
+        <Button variant="gradient" color="dark" onClick={(e) => searchHandler()}>Search</Button>
         </Container>
         </Grid.Col>
       </Grid>

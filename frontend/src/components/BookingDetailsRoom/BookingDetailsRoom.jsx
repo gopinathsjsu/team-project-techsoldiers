@@ -20,8 +20,8 @@ const useStyles = createStyles((theme) => ({
 
 export const BookingDetailsRoom = (props) => {
     const { classes } = useStyles();
-    let { roomType, roomIndex, selectedAmenities } = props.details;
-    
+    let { roomType, roomId, selectedAmenities } = props.details;
+    console.log('detials ',props.details);
     console.log('BookingDetailsRoom', props.amenities);
    
     const [checks, setChecks] = useState(selectedAmenities);
@@ -30,7 +30,7 @@ export const BookingDetailsRoom = (props) => {
         console.log('selected - ', selected);
         console.log('checks - ', checks);
       setChecks(selected);
-      props.changeRoomAmenities(roomIndex,selected);
+      props.changeRoomAmenities(roomId,selected);
     }
     return (
         <>
@@ -43,7 +43,7 @@ export const BookingDetailsRoom = (props) => {
                 mb={20}
                 >
                 <div>
-                        <Text order={3} className={classes.textp}><b>Room Type:</b> {roomType} {roomIndex + 1}</Text>
+                        <Text order={3} className={classes.textp}><b>Room Type:</b> {roomType} {roomId + 1}</Text>
                 </div>
                 <div>
                     <Text mb={10}><b>Amenities</b></Text>

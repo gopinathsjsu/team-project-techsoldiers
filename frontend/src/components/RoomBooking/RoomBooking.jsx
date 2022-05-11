@@ -56,15 +56,30 @@ export function RoomBooking(props) {
     navigate('/');
   }
 
+  function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
   const { data, isLoading, isError, isFetching } = useQuery(
     ["roomByHotel", props.hotel],
-    () => getRoomsByHotel(props.hotel),
+    () => getRoomsByHotel(props.hotel, formatDate(search.date.from), formatDate(search.date.to)),
     {
       suspense: true,
     }
   );
-
+    console.log(data);
   function bookRoom(roomID, price, roomType){
+    
     dispatch(bookingStatus({
       status: "inProgress",
       data: {

@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Box, Center, Container, Button, Grid } from "@mantine/core";
+import { Box, Center, Container, Button, Grid, Text } from "@mantine/core";
 import { Link, useParams } from "react-router-dom";
 import TopBar from "../../components/TopBar";
 import RoomBooking from "../../components/RoomBooking";
@@ -17,7 +17,7 @@ export function Booking() {
     <>
     <Box>
       <Container>
-        <Search componentName="Booking"/>
+        <Search componentName="Booking" />
         <Grid mb={30} mt={30}> 
           <RoomBooking hotel={hotelID} />
         </Grid>
