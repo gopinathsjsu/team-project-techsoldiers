@@ -86,3 +86,66 @@ DB Design use cases to keep in mind:
 7. Booking id, room id and amenities – table for this
 8. Room hotel mapping -> no. Of rooms and price
 
+## Deliverables
+
+### Deliverables For Sprint 1: (Feb 26 to March 9)
+- Created server for backend and front in first sprint
+- Architecture diagram - Varun and Shivani - Done
+- DB design - Sakshi and Varun - Done
+- Frontend baseline – Raj - Done
+- Backend baseline – Varun – Moved To next sprint
+- Wireframe for login, registration, landing and listing – Shivani - Done
+- Unit Testing Framework – Sakshi – Done
+- UI routing protection added – Raj - Done
+- Lesson Learn:
+- XP Values:
+		 - 1. Communication: Concentrate more on communication.
+		 - 2. Simplicity: Should Start with Simple component of the application.
+
+### Deliverables For Sprint 2: March 10 to March 23
+- hotel search component - UI (Varun) - Done
+- Backend baseline – Varun – Done
+- User Registration UI - Raj - Done
+- Wireframe Hotel Booking and booking summary UI- Shivani - Done
+- Backend service for listing locations – Sakshi - Done
+- Backend for Default hotel listing Api - Sakshi - Done
+- Backend for Hotel details Api - Varun - Done
+- Hotel Listing UI- Shivani - Done
+- Backend for Login and Registration - Raj - Done
+- Lesson Learn:
+- XP Values:
+		1. FeedBack: Concentrate more on doing code reviews.
+
+### Deliverables For Sprint 3: March 24 to April 6 
+- Backend service for Booking component- Sakshi - Done
+- Booking Ui – Shivani - Done 
+- Booking summary frontend - Shivani - Done
+- My Bookings Change/ Cancel Booking Wireframes - Shivani
+- Bookings api - Sakshi - Done
+- Ec2 autoscaling group - varun - Done
+- pricing strategy schema and api – varun and Sakshi - Done
+- Amenities listing api – Sakshi - Done
+- Frontend Integration - Raj & Shivani - Done
+- Code Refactoring - Raj - Done
+
+### Deliverables For Sprint 4: April 7 to April 20
+- Jenkins integration - Varun - Done
+- Pricing Strategy - Varun - Done
+- create a hotel, location, add rooms Api - Sakshi - Done
+- backend services for creation (hotel, location, room) UI - Shivani - Done
+- Booking Summary - Raj & Varun - Done
+- My Bookings Change/ Cancel Booking Api  - Done
+- My Bookings Change/ Cancel Booking Wireframes - Shivani - Done
+- My Bookings Change/ Cancel Booking UI - Shivani - Done
+- Frontend Integration - Raj & Shivani - Done
+- Admin - Raj - Done
+- Backend Route Protection - Raj - Done
+
+### Deliverables For Sprint 5: April 21 to May 5 
+- Booking Summary UI changes and integration - Varun/Shivani - Done
+- MyBooking Cancelation and Updation integration - Shivani - Done
+- Code Refactoration - Raj - Done
+- Final Integration of API- Raj - Done
+- Deployment of Code - Varun - Done
+
+
