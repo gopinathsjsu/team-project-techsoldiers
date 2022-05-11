@@ -134,7 +134,7 @@ export class BookingController {
       console.log(hotelRoomId);
 
       for (let _i = 0; _i < noOfRooms; _i++) {
-        console.log('Amenities :' + amenities[_i].amenities);
+       // console.log('Amenities :' + amenities[_i].amenities);
         const bookingRoomAmenitiesData = await this.bookingRoomAmenitiesService.createBookingRoomAmenities({
           totalPrice,
           amenities: amenities[_i].amenities + '',
@@ -148,7 +148,7 @@ export class BookingController {
 
         console.log(bookingRoomAmenitiesData.id);
       }
-
+      console.log('Created booking : ',bookingData );
       return booking;
     }
   }
@@ -221,6 +221,7 @@ export class BookingController {
   }
   async calculateAmenities(amenities: RoomAmenitiesRequest[]): Promise<number> {
     let amenitiesList: number[] = [];
+    console.log(amenities);
     amenities.forEach((room) => {
       amenitiesList = [...amenitiesList, ...room.amenities];
     });

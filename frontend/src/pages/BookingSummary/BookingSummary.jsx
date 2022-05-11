@@ -2,7 +2,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import { Box, Button, Card, Container, Grid } from "@mantine/core";
 import Amenities from "../../components/Amenities";
 import { useSelector } from 'react-redux';
-
+import { useNavigate } from "react-router-dom";
 import BookingDetails from "../../components/BookingDetails";
 import { getAmenityByHotelId } from '../../services/AmenityService';
 import BookingDetailsRoom from "../../components/BookingDetailsRoom";
@@ -19,6 +19,7 @@ export function BookingSummary() {
 
   const login = useSelector((state) => state.persistedReducer.login);
 
+  const navigate = useNavigate();
 
   const createBookingMutation = useMutation(createBookings);
 
@@ -50,20 +51,27 @@ export function BookingSummary() {
   console.log(bookingRooms);
   let [amprice, setAmprice] = useState(0);
   function changeRoomAmenities(roomid, amenities) {
-    console.log(roomid + " ", amenities);
+    console.log(roomid + " room ", amenities);
     bookingRooms[roomid].selectedAmenities = amenities;
     calculateAmenities(bookingRooms);
   }
   function calculateAmenities(bookingRooms) {
+    let prices = 0;
+    let amenities_all = [];
     for (let bookingRoom of bookingRooms) {
-      let amen = amenityData.filter(e => bookingRoom.selectedAmenities.indexOf(e.id));
-      let prices = 0;
-      amen.forEach(e => {
-        prices += parseInt(e.price);
-      });
-      setAmprice(amprice + prices);
+      console.log('updated ', bookingRoom.selectedAmenities);
+      amenities_all = [...amenities_all, ...(bookingRoom.selectedAmenities)];
+
     }
+    for (let i = 0; i < amenities_all.length; i++) {
+      let amend = amenityData.findIndex(e => e.id == amenities_all[i]);
+
+      prices += parseInt(amenityData[amend].price);
+    }
+    console.log("new amen prices", prices);
+    setAmprice(prices);
   }
+ 
   function bookNow() {
 
     if (login.status == "unauth") {
@@ -76,23 +84,34 @@ export function BookingSummary() {
       let amens = bookingRooms.map(e => {
         return { roomId: e.roomId, amenities: e.selectedAmenities.map(t => parseInt(t)) };
       });
-      createBookingMutation.mutateAsync({
-        data: {
-          "bookingToDate": bookings.date.to,
-          "bookingFromDate": bookings.date.from,
-          "roomId": parseInt(bookings.roomID),
-          "hotelId": parseInt(bookings.hotelID),
-          "amenities": bookingRooms,
-          "noOfRooms": parseInt(bookings.room)
-        },
+      let payload = {
+        "bookingToDate": bookings.date.to,
+        "bookingFromDate": bookings.date.from,
+        "roomId": parseInt(bookings.roomID),
+        "hotelId": parseInt(bookings.hotelID),
+        "amenities": amens,
+        "noOfRooms": parseInt(bookings.room)
+      };
+      console.log("booking payload", JSON.stringify(payload));
+      createBookings({
+        data: payload,
         token: login.data.jwt.token
-      }).then((res) => {
+      }).then((e) => {
         showNotification({
           title: "Success",
           message: 'Your Booking is created Successfully',
           color: "green"
+        });
+        navigate('/mybooking');
+      }).catch(err => {
+        console.log(err);
+        showNotification({
+          title: "Failure",
+          message: 'Booking Failed',
+          color: "red"
         })
-      })
+      });
+
     }
 
   }
@@ -106,7 +125,7 @@ export function BookingSummary() {
         <BookingDetails bookings={bookings} />
         <Grid mb={20}>
           {bookingRooms.length > 0 && bookingRooms.map((room) => {
-            return <Grid.Col span={6}><BookingDetailsRoom key={room.roomIndex} amenities={amenityData} details={room} changeRoomAmenities={changeRoomAmenities} /></Grid.Col>
+            return <BookingDetailsRoom key={room.roomIndex} amenities={amenityData} details={room} changeRoomAmenities={changeRoomAmenities} />
           })}
         </Grid>
         {/* {bookingRooms.length > 0 && bookingRooms.map((room) => {
